@@ -3343,11 +3343,19 @@ async function renderProfile(root){
   const stoolThisWeek = F.filter(e=>e.stool && e.date>=mondayISO).length;
   let lastStoolStr = '—', stoolHint = '';
   if (lastStoolDate){
+    // Big line: actual date "5 Jun" + the time of that day's last stool entry
+    const lastEntry = F.filter(e=>e.stool && e.date===lastStoolDate)
+      .sort((a,b)=>String(b.time||'').localeCompare(String(a.time||'')))[0];
+    const d = new Date(lastStoolDate+'T12:00:00');
+    const dStr = d.toLocaleDateString('en-US',{day:'numeric',month:'short'}); // e.g. "5 Jun"
+    const tStr = lastEntry && lastEntry.time ? ' · '+String(lastEntry.time).slice(0,5) : '';
+    lastStoolStr = dStr + tStr;
+    // Sub line: 'today', '1 day ago', etc. + weekly count
     const todayD = new Date(todayISO()+'T00:00:00');
     const lastD = new Date(lastStoolDate+'T00:00:00');
     const daysAgo = Math.round((todayD-lastD)/(1000*60*60*24));
-    lastStoolStr = daysAgo===0?'Today':daysAgo===1?'1 day ago':`${daysAgo} days ago`;
-    stoolHint = `${stoolThisWeek}/wk (from Mon)`;
+    const rel = daysAgo===0?'today':daysAgo===1?'1d ago':`${daysAgo}d ago`;
+    stoolHint = `${rel} · ${stoolThisWeek}/wk`;
   }
 
   // ─── HERO STATS (2x2) — Weight / Formula / Stool stats / Solids ───
@@ -3645,8 +3653,8 @@ function drawBarChart(canvasId, labels, data, color, unit){
     ctx.fillRect(x, y, barW, h);
   });
   ctx.globalAlpha = 1;
-  // X-axis: show every N-th label
-  const step = Math.ceil(data.length/6);
+  // X-axis: show every day for short periods, thin out only when crowded
+  const step = data.length <= 8 ? 1 : data.length <= 15 ? 2 : data.length <= 31 ? Math.ceil(data.length/8) : Math.ceil(data.length/6);
   ctx.fillStyle = text; ctx.font = '9px Inter,sans-serif'; ctx.textAlign='center';
   labels.forEach((d,i)=>{
     if (i%step!==0 && i!==labels.length-1) return;
