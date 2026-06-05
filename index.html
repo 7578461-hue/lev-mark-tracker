@@ -3256,16 +3256,19 @@ async function renderProfile(root){
 
   // sleep fetch range pulled back 1 day so cross-midnight sleeps that wake on startISO are included
   const sleepStartISO = (()=>{ const d=new Date(startISO+'T12:00:00'); d.setDate(d.getDate()-1); return dateISO(d); })();
-  const [feeds, meds, solids, summaries, weights, sleeps] = await Promise.all([
+  const [feeds, meds, solids, summaries, weights, sleeps, sleepsAll] = await Promise.all([
     db.from(T_FORMULA).select('*').eq('child',child).gte('date',startISO).lte('date',endISO),
     db.from(T_MEDS   ).select('*').eq('child',child).gte('date',startISO).lte('date',endISO),
     db.from(T_SOLIDS ).select('*').eq('child',child).gte('date',startISO).lte('date',endISO),
     db.from(T_SUMMARY).select('*').eq('child',child).gte('date',startISO).lte('date',endISO),
     db.from(T_WEIGHT ).select('*').eq('child',child).gte('date',startISO).lte('date',endISO).order('date',{ascending:true}),
     db.from(T_SLEEP  ).select('*').eq('child',child).gte('date',sleepStartISO).lte('date',endISO),
+    // both children's sleep for the hypnogram comparison
+    db.from(T_SLEEP  ).select('*').gte('date',sleepStartISO).lte('date',endISO),
   ]);
   const F = feeds.data||[], M = meds.data||[], S = solids.data||[], DS = summaries.data||[], W = weights.data||[];
   const SL = sleeps.data || [];
+  const SL_ALL = sleepsAll.data || [];
 
   // build day buckets
   const dates = [];
@@ -3465,10 +3468,75 @@ async function renderProfile(root){
       ${notes.length>10?`<div class="ni-more">+ ещё ${notes.length-10} заметок</div>`:''}
     </div>`;
 
+  // ── Hypnogram: both children's sleep on a 24-hour timeline ──
+  // For each interval, split at local-midnight so a 20:00→03:00 sleep
+  // shows as a piece on its start-day and a piece on its end-day.
+  function dayClipped(slArr){
+    const out = [];
+    slArr.forEach(e => {
+      if (!e.start_time) return;
+      const start = new Date(e.start_time);
+      const end = e.end_time ? new Date(e.end_time) : new Date();
+      if (end <= start) return;
+      let cursor = new Date(start);
+      let safety = 0;
+      while (cursor < end && safety++ < 20){
+        const ds = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate());
+        const de = new Date(cursor.getFullYear(), cursor.getMonth(), cursor.getDate()+1);
+        const segStart = cursor > ds ? cursor : ds;
+        const segEnd = end < de ? end : de;
+        out.push({
+          date: dateISO(cursor),
+          startH: (segStart - ds) / 3600000,
+          endH: (segEnd - ds) / 3600000,
+          open: !e.end_time,
+        });
+        cursor = de;
+      }
+    });
+    return out;
+  }
+  const ivLev  = dayClipped(SL_ALL.filter(s => s.child === 'lev'));
+  const ivMark = dayClipped(SL_ALL.filter(s => s.child === 'mark'));
+
+  // build SVG hypnogram for last min(14,days) days
+  const hypDays = dates.slice(-Math.min(14, dates.length));
+  const labelW = 56, chartW = 380, rowH = 30, padTop = 22;
+  const svgH = padTop + hypDays.length * rowH + 8;
+  const xH = h => labelW + h/24 * chartW;
+  const rect = (iv, y, color) =>
+    `<rect x="${xH(iv.startH).toFixed(1)}" y="${y}" width="${((iv.endH-iv.startH)/24*chartW).toFixed(1)}" height="10" fill="${color}" ${iv.open?'opacity=".55"':''} rx="2"/>`;
+  const gridLines = '[0,6,12,18,24]'.length;  // placeholder, build below
+  const hourTicks = [0,6,12,18,24];
+  const hypSvg = `<svg viewBox="0 0 ${labelW+chartW+10} ${svgH}" style="width:100%;height:auto;display:block">
+    ${hourTicks.map(h => `<text x="${xH(h)}" y="13" font-size="9" fill="var(--hint)" text-anchor="middle">${h===24?'24':h+'h'}</text>`).join('')}
+    ${hypDays.map((d, i) => {
+      const y = padTop + i*rowH;
+      const levY = y + 3, markY = y + 15;
+      const gh = hourTicks.map(h => `<line x1="${xH(h)}" y1="${y+1}" x2="${xH(h)}" y2="${y+rowH-3}" stroke="rgba(0,0,0,.06)" stroke-width=".5"/>`).join('');
+      const levRects  = ivLev .filter(iv => iv.date === d).map(iv => rect(iv, levY, '#2A6B88')).join('');
+      const markRects = ivMark.filter(iv => iv.date === d).map(iv => rect(iv, markY, '#5C8B6F')).join('');
+      const ds = fmtDateShortRU(d);
+      return `${gh}<text x="${labelW-6}" y="${y+18}" font-size="10" fill="var(--muted)" text-anchor="end">${ds.day} ${ds.mo}</text>${levRects}${markRects}`;
+    }).join('')}
+  </svg>`;
+  const hypnoCard = `
+    <div class="card tight">
+      <div style="display:flex;gap:14px;font-size:11px;color:var(--muted);margin-bottom:8px;flex-wrap:wrap">
+        <span><span style="display:inline-block;width:14px;height:8px;background:#2A6B88;border-radius:2px;vertical-align:middle"></span> Lev / Лев</span>
+        <span><span style="display:inline-block;width:14px;height:8px;background:#5C8B6F;border-radius:2px;vertical-align:middle"></span> Mark / Марк</span>
+        <span style="margin-left:auto;font-style:italic">Last ${hypDays.length} days · 24h</span>
+      </div>
+      ${hypSvg}
+    </div>`;
+
   root.innerHTML = `
     ${periodBtns}
     ${heroH}
     ${trendsH}
+
+    <div class="section-hdr">🌙 Sleep rhythm <span class="sh-en">/ Ритм сна (Lev vs Mark)</span></div>
+    ${hypnoCard}
 
     <div class="section-hdr">💩 Цвета стула <span class="sh-en">/ Stool colors</span></div>
     <div class="card tight color-bars">${colorsRows}</div>
