@@ -712,6 +712,16 @@ body.parents-mode .main{padding-bottom:calc(var(--nav-h) + 20px + var(--safe-bot
 .day-grp:last-child{margin-bottom:0}
 .day-grp-hdr{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:6px 2px 4px}
 
+/* Manual portion entry under the chips */
+.amt-manual{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.amt-manual input,.amt-manual select{
+  padding:11px 12px;border:.5px solid var(--bmd);border-radius:var(--rsm);
+  font-family:inherit;font-size:16px;background:var(--bg);outline:none;
+  -webkit-appearance:none;color:var(--text);
+}
+.amt-manual input{text-align:center;font-weight:600}
+.amt-manual select{background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236A6860' stroke-width='1.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") right 12px center no-repeat;padding-right:30px}
+
 /* day-picker — choose which date a new save lands on */
 .day-pick{display:flex;gap:6px;margin-bottom:10px}
 .day-pick button{
@@ -1093,6 +1103,15 @@ body.parents-mode .main{padding-bottom:calc(var(--nav-h) + 20px + var(--safe-bot
       <div class="card">
         <div class="bi"><span class="bi-ru">Portion size</span><span class="bi-en">/ Объём порции</span></div>
         <div class="g3" id="amt-grid"></div>
+        <div class="amt-manual">
+          <input type="number" inputmode="decimal" step="0.5" id="s-amt-num" placeholder="manual / вручную" oninput="onAmtManual()">
+          <select id="s-amt-unit" onchange="onAmtManual()">
+            <option value="tsp">tsp / ч.л.</option>
+            <option value="tbsp">tbsp / ст.л.</option>
+            <option value="g">g / г</option>
+            <option value="ml">ml / мл</option>
+          </select>
+        </div>
       </div>
 
       <div class="card">
@@ -1350,6 +1369,23 @@ const AMTS = [
   {v:'20', ru:'100 g',  en:'100 г',   s:'~½ portion'},
   {v:'30', ru:'150 g',  en:'150 г',   s:'full'},
 ];
+// Format an amount field: AMTS preset OR custom string "c:<num>:<unit>"
+function fmtAmount(v){
+  if (!v) return '';
+  const preset = AMTS.find(a => a.v === v);
+  if (preset) return preset.ru + ' / ' + preset.en;
+  if (typeof v === 'string' && v.startsWith('c:')){
+    const [_, num, unit] = v.split(':');
+    const unitMap = {
+      tsp:  num+' tsp / '+num+' ч.л.',
+      tbsp: num+' tbsp / '+num+' ст.л.',
+      g:    num+' g / '+num+' г',
+      ml:   num+' ml / '+num+' мл',
+    };
+    return unitMap[unit] || (num+' '+unit);
+  }
+  return v;
+}
 const ACCS = [
   {k:'all',     ico:'😋', ru:'Ate all',  en:'Съел всё'},
   {k:'half',    ico:'🙂', ru:'Half',     en:'Половину'},
@@ -1861,10 +1897,23 @@ function renderAmts(){
     const d = document.createElement('div');
     d.className = 'tap' + (sSel.amount===a.v ? ' '+sc() : '');
     d.innerHTML = `<span class="t1">${a.ru}</span><span class="t2">${a.en}</span><span class="t3">${a.s}</span>`;
-    d.onclick = () => { sSel.amount = sSel.amount===a.v ? null : a.v; renderAmts(); };
+    d.onclick = () => {
+      sSel.amount = sSel.amount===a.v ? null : a.v;
+      // clear manual input when picking a preset
+      const ni=document.getElementById('s-amt-num'); if (ni) ni.value='';
+      renderAmts();
+    };
     g.appendChild(d);
   });
 }
+// Manual portion input: encode as "c:<num>:<unit>" so display can format it back.
+window.onAmtManual = function(){
+  const num = document.getElementById('s-amt-num').value.trim();
+  const unit = document.getElementById('s-amt-unit').value || 'tsp';
+  if (!num){ sSel.amount = null; renderAmts(); return; }
+  sSel.amount = 'c:'+num+':'+unit;
+  renderAmts();
+};
 function renderAccs(){
   const g = document.getElementById('acc-grid'); g.innerHTML='';
   ACCS.forEach(a => {
@@ -1995,9 +2044,9 @@ async function renderSolidsList(){
     const rowsH = groups[d].map(e => {
       const t = escH(String(e.time||'').slice(0,5));
       const prod = escH(e.product||'');
-      const amt = AMTS.find(a=>a.v===e.amount);
+      const amtStr = fmtAmount(e.amount);
       const acc = ACCS.find(a=>a.k===e.accept);
-      const sub = [amt?(amt.ru+' / '+amt.en):'', acc?(acc.ico+' '+acc.ru):''].filter(Boolean).join(' · ');
+      const sub = [amtStr, acc?(acc.ico+' '+acc.ru):''].filter(Boolean).join(' · ');
       return `<div class="sleep-list-item">
         <div style="min-width:0;flex:1">
           <div class="sli-time">${t} · ${prod}${e.is_new?' <span style="font-size:11px;color:var(--warn);font-weight:600">★ new</span>':''}</div>
@@ -2973,9 +3022,9 @@ function renderTimelineEntry(ev){
     case 'solids':{
       kindLbl = 'Solids / 🥦 Прикорм';
       title = e.product;
-      const a = AMTS.find(x=>x.v===e.amount);
+      const amtStr = fmtAmount(e.amount);
       const ac = ACCS.find(x=>x.k===e.accept);
-      sub = [a?`${a.ru} / ${a.en}`:'', ac?`${ac.ico} ${ac.ru}`:''].filter(Boolean).join(' · ');
+      sub = [amtStr, ac?`${ac.ico} ${ac.ru}`:''].filter(Boolean).join(' · ');
       if (e.is_new) pills += `<span class="pill p-warn">★ Новый / New</span>`;
       (e.reactions||[]).forEach(rk => {
         const r = REAS.find(x=>x.k===rk);
