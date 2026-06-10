@@ -1335,15 +1335,28 @@ function vitdDose(c){
   }
   return '2 drops / 2 капли';
 }
+// Maltofer regimen:
+//   Lev  — cancelled entirely (никогда не показываем)
+//   Mark — 5 drops once a day, morning only, 2 weeks from 2026-06-05 → 2026-06-19
+function showMaltofer(c, _doseTime){
+  if (c !== 'mark') return false;
+  if (_doseTime !== 'morning') return false;
+  const t = todayISO();
+  return t >= '2026-06-05' && t <= '2026-06-19';
+}
 const MED_SCHEDULE = {
-  morning:   [{k:'maltofer',  ico:'💧',ru:'Maltofer',  en:'Мальтофер',         dose:c=>MED_DOSE(c)},
+  morning:   [{k:'maltofer',  ico:'💧',ru:'Maltofer',  en:'Мальтофер',         dose:_=>'5 drops / 5 капель', show:showMaltofer},
               {k:'folic',     ico:'💊',ru:'Folic acid',en:'Фолиевая кислота',  dose:_=>'¼ tab / ¼ таб'},
               {k:'vitd',      ico:'☀️',ru:'Vitamin D', en:'Витамин D',         dose:c=>vitdDose(c)},
               {k:'emollient', ico:'🧴',ru:'Emollient', en:'Эмолент (Emolium/Avene)', dose:_=>'apply / нанести'}],
-  afternoon: [{k:'maltofer',  ico:'💧',ru:'Maltofer',  en:'Мальтофер',         dose:c=>MED_DOSE(c)}],
-  evening:   [{k:'maltofer',  ico:'💧',ru:'Maltofer',  en:'Мальтофер',         dose:c=>MED_DOSE(c)},
+  afternoon: [{k:'maltofer',  ico:'💧',ru:'Maltofer',  en:'Мальтофер',         dose:_=>'5 drops / 5 капель', show:showMaltofer}],
+  evening:   [{k:'maltofer',  ico:'💧',ru:'Maltofer',  en:'Мальтофер',         dose:_=>'5 drops / 5 капель', show:showMaltofer},
               {k:'emollient', ico:'🧴',ru:'Emollient', en:'Эмолент (Emolium/Avene)', dose:_=>'apply / нанести'}],
 };
+// Returns the schedule items for a child at a dose-time, filtered by per-med availability.
+function medsAt(child, doseTime){
+  return (MED_SCHEDULE[doseTime] || []).filter(m => !m.show || m.show(child, doseTime));
+}
 const DOSE_TIME_LBL = {
   morning:   {ru:'MORNING',  ен:'Утро',  ico:'☀️'},
   afternoon: {ru:'AFTERNOON',ен:'День',  ico:'🌤'},
@@ -2669,9 +2682,8 @@ async function renderHome(){
   // bucket sleep by wake-day rule
   const SL=(sleep.data||[]).filter(e => sleepBucketDate(e)===day);
   const W=weights.data||[];
-  const totalExp = totalExpectedMeds();
-
   const col = (c) => {
+    const totalExp = totalExpectedMedsFor(c);  // per-child schedule
     const all = F.filter(e=>e.child===c);
     // count only entries that actually have formula (not standalone stool entries)
     const feedings = all.filter(e=>(e.nutrilon_ml||0)>0 || (e.kabrita_ml||0)>0);
@@ -2681,7 +2693,10 @@ async function renderHome(){
     const lastSolid = sList.length ? sList[sList.length-1] : null;
     const poo = all.filter(e=>e.stool).length;
     const gm = {}; M.filter(e=>e.child===c && e.given).forEach(e=>{ gm[e.medication+'|'+e.dose_time]=1; });
-    const given = Object.keys(gm).length;
+    const given = Object.keys(gm).filter(k => {
+      const [med, dt] = k.split('|');
+      return medsAt(c, dt).some(m => m.k === med);
+    }).length;
     const sl = SL.filter(e=>e.child===c);
     let totalMin = 0, last = null;
     sl.forEach(e=>{
@@ -2692,7 +2707,7 @@ async function renderHome(){
     // last weight up to this day (across all dates ≤ day)
     const childWeights = W.filter(w=>w.child===c);
     const lastWeight = childWeights.length ? childWeights[0] : null;
-    return {fCount:feedings.length, totalMl, wMl, lastSolid, poo, given, slCount:sl.length, totalMin, last, lastWeight};
+    return {fCount:feedings.length, totalMl, wMl, lastSolid, poo, given, totalExp, slCount:sl.length, totalMin, last, lastWeight};
   };
   const D = { lev: col('lev'), mark: col('mark') };
 
@@ -2704,7 +2719,7 @@ async function renderHome(){
     const display = parts.length > 1 ? parts[1] : parts[0];
     return `${escH(display)}<small>${escH(d.lastSolid.time||'')}</small>`;
   };
-  const cMeds  = d => `${d.given} / ${totalExp}`;
+  const cMeds  = d => d.totalExp === 0 ? '—' : `${d.given} / ${d.totalExp}`;
   const cStool = d => d.poo ? `${d.poo} ${d.poo===1?'time':'times'}` : 'no';
   const cSleep = d => {
     if (!d.slCount) return '—';
@@ -2766,6 +2781,9 @@ function medKey(med, dt){ return med+'|'+dt; }
 function totalExpectedMeds(){
   return Object.values(MED_SCHEDULE).reduce((s,arr)=>s+arr.length,0);
 }
+function totalExpectedMedsFor(child){
+  return ['morning','afternoon','evening'].reduce((s,dt)=>s+medsAt(child,dt).length, 0);
+}
 async function renderMeds(){
   const sum = document.getElementById('med-summary');
   const cards = document.getElementById('med-cards');
@@ -2773,8 +2791,13 @@ async function renderMeds(){
   const existing = await loadMedsToday();
   const givenMap = {};
   existing.forEach(e => { if (e.given) givenMap[medKey(e.medication, e.dose_time)] = e; });
-  const totalExp = totalExpectedMeds();
-  const totalGiven = Object.keys(givenMap).length;
+  const totalExp = totalExpectedMedsFor(child);
+  // Hide a card entirely if no meds scheduled for that dose-time today
+  const visibleDoseTimes = ['morning','afternoon','evening'].filter(dt => medsAt(child,dt).length > 0);
+  const totalGiven = Object.keys(givenMap).filter(k => {
+    const [med, dt] = k.split('|');
+    return medsAt(child, dt).some(m => m.k === med);
+  }).length;
   const missing = totalExp - totalGiven;
   sum.innerHTML = `<div class="med-summary">
     <div>
@@ -2785,9 +2808,10 @@ async function renderMeds(){
   </div>`;
 
   let html = '';
-  ['morning','afternoon','evening'].forEach(dt => {
+  visibleDoseTimes.forEach(dt => {
     const lbl = DOSE_TIME_LBL[dt];
-    const cardGiven = MED_SCHEDULE[dt].every(m => givenMap[medKey(m.k, dt)]);
+    const meds = medsAt(child, dt);
+    const cardGiven = meds.every(m => givenMap[medKey(m.k, dt)]);
     html += `<div class="med-card${cardGiven?' has-given':''}">
       <div class="med-hdr">
         <div>
@@ -2796,7 +2820,7 @@ async function renderMeds(){
         </div>
         ${cardGiven?'<div style="font-size:12px;color:var(--ok);font-weight:600">✓ Готово / Done</div>':''}
       </div>`;
-    MED_SCHEDULE[dt].forEach(m => {
+    meds.forEach(m => {
       const e = givenMap[medKey(m.k, dt)];
       const given = !!e;
       html += `<div class="med-row${given?' given':''}" onclick="toggleMed('${m.k}','${dt}')">
@@ -3347,7 +3371,7 @@ async function renderProfile(root){
   let regimenStart = null;
   M.forEach(e => { const sd = e.start_date || e.date; if (sd && (!regimenStart || sd < regimenStart)) regimenStart = sd; });
   const effDates = regimenStart ? dates.filter(d => d >= regimenStart) : [];
-  const totalExp = totalExpectedMeds() * effDates.length;
+  const totalExp = totalExpectedMedsFor(child) * effDates.length;
   const medGivenCount = M.filter(e=>e.given).length;
   const medPct = totalExp>0 ? Math.round(medGivenCount/totalExp*100) : 0;
   // missed days = past days (within regimen) where 0 meds given; today excluded (ongoing)
