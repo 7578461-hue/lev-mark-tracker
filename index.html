@@ -822,7 +822,7 @@ body[data-view="sleep"] .topbar{background:transparent;border-bottom:none}
 .dm-kid.lev{background:linear-gradient(135deg,#E7F2F8 0%,#D5E8F2 100%)}
 .dm-kid.mark{background:linear-gradient(135deg,#E7EFE9 0%,#D5E5D8 100%)}
 .dm-pic{width:52px;height:52px;border-radius:13px;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(0,30,60,.1)}
-.dm-pic svg{width:44px;height:44px;display:block}
+.dm-pic svg,.dm-pic img{width:44px;height:44px;display:block;object-fit:contain}
 .dm-pic.lev{color:#1A4A60}
 .dm-pic.mark{color:#2E5A41}
 .dm-info{min-width:0;flex:1}
@@ -2982,7 +2982,7 @@ async function renderHome(){
     <div class="dm-hdr">Today's Overview · Сегодня</div>
     <div class="dm-kids">
       <div class="dm-kid lev">
-        <div class="dm-pic lev"><svg viewBox="0 0 100 100"><use href="#i-lion"/></svg></div>
+        <div class="dm-pic lev"><img src="lion.svg" alt="Lev"></div>
         <div class="dm-info">
           <div class="dm-name lev">Lev</div>
           <div class="dm-st">${statusLine(D.lev)}</div>
