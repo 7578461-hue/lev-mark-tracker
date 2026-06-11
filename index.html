@@ -821,7 +821,8 @@ body[data-view="sleep"] .topbar{background:transparent;border-bottom:none}
 .dm-kid{display:flex;align-items:center;gap:10px;border-radius:14px;padding:10px;min-width:0}
 .dm-kid.lev{background:linear-gradient(135deg,#E7F2F8 0%,#D5E8F2 100%)}
 .dm-kid.mark{background:linear-gradient(135deg,#E7EFE9 0%,#D5E5D8 100%)}
-.dm-pic{width:36px;height:36px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:800;font-size:17px;letter-spacing:-.5px;box-shadow:inset 0 0 0 1.5px currentColor}
+.dm-pic{width:46px;height:46px;border-radius:11px;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 6px rgba(0,30,60,.08)}
+.dm-pic svg{width:34px;height:34px;display:block}
 .dm-pic.lev{color:#1A4A60}
 .dm-pic.mark{color:#2E5A41}
 .dm-info{min-width:0;flex:1}
@@ -925,6 +926,45 @@ body[data-view="home"] .bnav button .nv-ico svg{width:22px;height:22px;display:b
   <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 19h16M7 16V9M12 16V6M17 16v-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
   <symbol id="i-baby" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 9h.01M14 9h.01M10 12c.5.5 1.5 1 2 1s1.5-.5 2-1M12 15v4M9 19l-2 2M15 19l2 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
   <symbol id="i-arr" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-lion" viewBox="0 0 64 64">
+    <!-- mane: wavy outer ring -->
+    <path d="M32 5 C 26 4 21 6 18 10 C 12 9 7 13 7 19 C 4 22 5 28 9 31 C 5 35 6 41 11 44 C 10 49 14 54 19 54 C 22 58 27 60 32 60 C 37 60 42 58 45 54 C 50 54 54 49 53 44 C 58 41 59 35 55 31 C 59 28 60 22 57 19 C 57 13 52 9 46 10 C 43 6 38 4 32 5 Z" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/>
+    <!-- inner face -->
+    <ellipse cx="32" cy="35" rx="14" ry="14.5" fill="none" stroke="currentColor" stroke-width="2"/>
+    <!-- ears -->
+    <ellipse cx="20" cy="24" rx="3.6" ry="4.6" fill="none" stroke="currentColor" stroke-width="2"/>
+    <ellipse cx="44" cy="24" rx="3.6" ry="4.6" fill="none" stroke="currentColor" stroke-width="2"/>
+    <!-- eyes -->
+    <circle cx="26" cy="33" r="1.6" fill="currentColor"/>
+    <circle cx="38" cy="33" r="1.6" fill="currentColor"/>
+    <!-- nose -->
+    <path d="M29.5 39.5 L34.5 39.5 L32 42.5 Z" fill="currentColor"/>
+    <!-- mouth -->
+    <path d="M32 42.5 V45.5 M32 45.5 C 30 47.5 28 47.5 27 46 M32 45.5 C 34 47.5 36 47.5 37 46" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="i-tiger" viewBox="0 0 64 64">
+    <!-- ears -->
+    <path d="M16 18 L18 7 L25 16 Z" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/>
+    <path d="M48 18 L46 7 L39 16 Z" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/>
+    <!-- face -->
+    <path d="M14 22 C 14 14 22 12 32 12 C 42 12 50 14 50 22 L 50 38 C 50 50 42 57 32 57 C 22 57 14 50 14 38 Z" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/>
+    <!-- forehead stripes -->
+    <path d="M27 15 L25 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <path d="M32 13 L32 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <path d="M37 15 L39 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <!-- cheek stripes -->
+    <path d="M15 30 L21 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <path d="M49 30 L43 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <path d="M15 38 L21 38" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <path d="M49 38 L43 38" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <!-- eyes -->
+    <circle cx="25" cy="32" r="1.8" fill="currentColor"/>
+    <circle cx="39" cy="32" r="1.8" fill="currentColor"/>
+    <!-- nose -->
+    <path d="M29 40 L35 40 L32 43.5 Z" fill="currentColor"/>
+    <!-- mouth -->
+    <path d="M32 43.5 V46.5 M32 46.5 C 30 48.5 28 48.5 27 47 M32 46.5 C 34 48.5 36 48.5 37 47" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+  </symbol>
 </defs></svg>
 
 <header class="topbar">
@@ -2937,14 +2977,14 @@ async function renderHome(){
     <div class="dm-hdr">Today's Overview · Сегодня</div>
     <div class="dm-kids">
       <div class="dm-kid lev">
-        <div class="dm-pic lev">L</div>
+        <div class="dm-pic lev"><svg viewBox="0 0 64 64"><use href="#i-lion"/></svg></div>
         <div class="dm-info">
           <div class="dm-name lev">Lev</div>
           <div class="dm-st">${statusLine(D.lev)}</div>
         </div>
       </div>
       <div class="dm-kid mark">
-        <div class="dm-pic mark">M</div>
+        <div class="dm-pic mark"><svg viewBox="0 0 64 64"><use href="#i-tiger"/></svg></div>
         <div class="dm-info">
           <div class="dm-name mark">Mark</div>
           <div class="dm-st">${statusLine(D.mark)}</div>
