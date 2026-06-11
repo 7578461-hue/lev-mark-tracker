@@ -755,6 +755,118 @@ body.parents-mode .main{padding-bottom:calc(var(--nav-h) + 20px + var(--safe-bot
 .upcoming-card ul{margin:0;padding-left:18px;font-size:13px;line-height:1.6;color:var(--text)}
 .upcoming-card li{margin:3px 0}
 .upcoming-card .up-meta{font-size:11px;color:var(--hint);margin-top:8px;padding-top:6px;border-top:.5px solid var(--border)}
+
+/* ────────────────────────────────────────────────────
+   MODERN HOME RESTYLE
+   ──────────────────────────────────────────────────── */
+body[data-view="home"]{background:linear-gradient(180deg,#E0F2F7 0%,#F0FAFD 60%,#FFFFFF 100%)}
+body[data-view="home"] .topbar{display:none}
+body[data-view="home"] .main{padding-top:calc(14px + var(--safe-top))}
+
+.icn{width:22px;height:22px;display:block}
+.icn-sm{width:18px;height:18px;display:block}
+.icn-lg{width:26px;height:26px;display:block}
+
+/* Greeting */
+.hg{display:flex;align-items:center;gap:10px;justify-content:space-between;padding:0 4px;margin-bottom:14px}
+.hg-av{
+  width:46px;height:46px;border-radius:50%;
+  background:linear-gradient(135deg,#9DD8E6,#7BC8DB);
+  display:flex;align-items:center;justify-content:center;color:#fff;
+  flex-shrink:0;box-shadow:0 4px 10px rgba(0,80,120,.15);
+}
+.hg-who{flex:1;min-width:0}
+.hg-who h3{font-size:17px;font-weight:800;letter-spacing:-.3px;line-height:1.15;color:#1a1d24}
+.hg-who p{font-size:11px;color:#5a6778;margin-top:2px}
+.hg-bell{
+  width:38px;height:38px;border-radius:50%;background:#fff;border:none;
+  display:flex;align-items:center;justify-content:center;color:#5a6778;
+  box-shadow:0 2px 6px rgba(0,0,0,.06);flex-shrink:0;cursor:pointer;font-family:inherit;
+}
+
+/* Day nav (chevrons) in modern style */
+.hg .hn-arr{
+  width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.8);border:none;
+  display:flex;align-items:center;justify-content:center;color:#1a1d24;
+  font-size:18px;cursor:pointer;font-family:inherit;font-weight:700;
+}
+.hg .hn-arr.dim{opacity:.3}
+
+/* Dual summary new layout */
+.dual-modern{
+  background:#fff;border-radius:20px;padding:14px;margin-bottom:12px;
+  box-shadow:0 2px 12px rgba(0,30,60,.06);
+}
+.dual-modern .dm-hdr{font-size:10px;font-weight:700;color:#5a6778;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.dm-kids{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.dm-kid{display:flex;align-items:center;gap:10px;border-radius:14px;padding:10px;min-width:0}
+.dm-kid.lev{background:linear-gradient(135deg,#E7F2F8 0%,#D5E8F2 100%)}
+.dm-kid.mark{background:linear-gradient(135deg,#E7EFE9 0%,#D5E5D8 100%)}
+.dm-pic{width:34px;height:34px;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dm-info{min-width:0;flex:1}
+.dm-info .dm-name{font-size:12px;font-weight:800;line-height:1}
+.dm-info .dm-name.lev{color:#1A4A60}
+.dm-info .dm-name.mark{color:#2E5A41}
+.dm-info .dm-st{font-size:10px;color:#5a6778;margin-top:2px;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dm-nums{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;padding-top:10px;border-top:.5px solid rgba(0,0,0,.06)}
+.dm-nums .dm-col{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;padding:0 4px;position:relative}
+.dm-nums .dm-col:first-child::after{
+  content:'';position:absolute;right:-4px;top:10%;height:80%;width:.5px;background:rgba(0,0,0,.08);
+}
+.dm-n{text-align:center;min-width:0;overflow:hidden}
+.dm-n .vv{font-size:12px;font-weight:800;color:#1a1d24;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dm-n .vv.lev{color:#1A4A60}
+.dm-n .vv.mark{color:#2E5A41}
+.dm-n .ll{font-size:8px;color:#5a6778;margin-top:2px;line-height:1.1}
+
+/* Wide gradient bars */
+.wbar{
+  display:flex;align-items:center;gap:12px;
+  border:none;width:100%;
+  border-radius:18px;padding:14px;margin-bottom:12px;
+  cursor:pointer;font-family:inherit;text-align:left;color:#fff;
+}
+.wbar.wb-sleep{background:linear-gradient(135deg,#7B5BB5 0%,#5B3B95 100%);box-shadow:0 6px 16px rgba(123,91,181,.25)}
+.wbar.wb-eod{background:linear-gradient(135deg,#FFC659 0%,#FF9933 100%);box-shadow:0 6px 16px rgba(255,160,40,.25)}
+.wbar .wb-ic{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0}
+.wbar .wb-tx{flex:1;min-width:0}
+.wbar .wb-tx b{font-size:15px;font-weight:800;display:block;line-height:1.2}
+.wbar .wb-tx small{font-size:11px;opacity:.85}
+.wbar .wb-ar{width:30px;height:30px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0}
+.wbar.wb-sleep .wb-ar{color:#5B3B95}
+.wbar.wb-eod .wb-ar{color:#D85020}
+
+/* Tiles in modern style */
+.tiles-modern{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px}
+.tile-modern{
+  background:#fff;border:none;border-radius:18px;padding:14px 8px;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  cursor:pointer;font-family:inherit;
+  box-shadow:0 2px 8px rgba(0,30,60,.06);
+}
+.tile-modern:active{transform:scale(.97)}
+.tile-modern .tm-ic{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.tile-modern .tm-lb{font-size:12px;font-weight:700;color:#1a1d24}
+.tile-modern .tm-sub{font-size:9px;color:#5a6778}
+.tile-modern.t-feed .tm-ic{background:#FCE4E4;color:#D85050}
+.tile-modern.t-water .tm-ic{background:#DDF0FA;color:#3A8FB5}
+.tile-modern.t-stool .tm-ic{background:#F0E5D8;color:#7A5030}
+.tile-modern.t-solids .tm-ic{background:#E0F0DC;color:#5C8B6F}
+.tile-modern.t-meds .tm-ic{background:#FFE0D5;color:#D87560}
+.tile-modern.t-weight .tm-ic{background:#F4F0E5;color:#8A5F1A}
+
+/* Modern bottom nav (round circles) */
+body[data-view="home"] .bnav{background:transparent;border-top:none;padding:10px 24px calc(14px + var(--safe-bot));display:flex;gap:18px;justify-content:center}
+body[data-view="home"] .bnav button{
+  flex:0 0 auto;width:46px;height:46px;border-radius:50%;background:#fff;
+  display:flex;align-items:center;justify-content:center;color:#5a6778;
+  box-shadow:0 2px 6px rgba(0,0,0,.04);
+}
+body[data-view="home"] .bnav button.active{background:linear-gradient(135deg,#1A3550,#2A5478);color:#fff;box-shadow:0 4px 12px rgba(26,53,80,.3)}
+body[data-view="home"] .bnav button .nv-ru,
+body[data-view="home"] .bnav button .nv-en{display:none}
+body[data-view="home"] .bnav button .nv-ico{font-size:0}
+body[data-view="home"] .bnav button .nv-ico svg{width:22px;height:22px;display:block}
 .inline-actions .ebtn{flex:1;padding:9px;border-radius:var(--rsm);border:.5px solid var(--bmd);background:var(--surface);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;touch-action:manipulation;color:var(--muted)}
 .inline-actions .ebtn-save{color:white;border-color:transparent}
 .inline-actions .ebtn-save.lev{background:var(--lev)}
@@ -777,6 +889,23 @@ body.parents-mode .main{padding-bottom:calc(var(--nav-h) + 20px + var(--safe-bot
 </head>
 <body data-view="home">
 
+<!-- SVG icon library (Phosphor-style) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="i-bottle" viewBox="0 0 24 24"><path d="M9 3h6v3.5l1 1.5v10a3 3 0 01-3 3h-2a3 3 0 01-3-3V8l1-1.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12h6M9 16h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-water" viewBox="0 0 24 24"><path d="M12 3c4 6 6 9 6 12a6 6 0 01-12 0c0-3 2-6 6-12z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14a8 8 0 11-10-10 7 7 0 0010 10z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-stool" viewBox="0 0 24 24"><path d="M7 21h10M6 21c-1-3 0-5 2-6 1.5-.7 1.5-2 0-3-2-1.5-2-4 1-5h6c3 1 3 3.5 1 5-1.5 1-1.5 2.3 0 3 2 1 3 3 2 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-broccoli" viewBox="0 0 24 24"><circle cx="8" cy="9" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="16" cy="9" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="7" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 12l-1 8M16 12l1 8M12 11v9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-pill" viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="6" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><line x1="12" y1="9" x2="12" y2="15" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M4 7h16l-2 13H6L4 7zM9 3h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="13" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 16v-5a6 6 0 10-12 0v5l-2 2h16l-2-2zM10 21a2 2 0 004 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h14V10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3 10h18M8 3v4M16 3v4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 19h16M7 16V9M12 16V6M17 16v-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-baby" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 9h.01M14 9h.01M10 12c.5.5 1.5 1 2 1s1.5-.5 2-1M12 15v4M9 19l-2 2M15 19l2 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-arr" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</defs></svg>
+
 <header class="topbar">
   <div class="tb-row">
     <div class="brand">
@@ -796,19 +925,54 @@ body.parents-mode .main{padding-bottom:calc(var(--nav-h) + 20px + var(--safe-bot
 
   <!-- ═══ HOME / ГЛАВНАЯ ═══ -->
   <section class="tab-pane active" data-view="home" id="pane-home">
-    <div class="home-date" id="home-date">—</div>
+    <div class="hg" id="home-greet">
+      <button class="hn-arr" onclick="navHomeDay(-1)" aria-label="prev">‹</button>
+      <div class="hg-who" id="hg-who">
+        <h3>Hello, Andrey 👋</h3>
+        <p id="home-date-line">—</p>
+      </div>
+      <button class="hn-arr" id="hn-next" onclick="navHomeDay(1)" aria-label="next">›</button>
+      <button class="hg-bell" onclick="toggleMode()" id="mode-btn" title="Mode"><svg class="icn"><use href="#i-bell"/></svg></button>
+    </div>
+    <div class="home-date" id="home-date" style="display:none">—</div>
     <div class="dual" id="dual-summary"><div class="loading">Загрузка... / Loading...</div></div>
     <div class="nanny-only">
-      <button class="tile-wide t-sleep" onclick="goView('sleep')"><span class="ti-ico">😴</span><span class="ti-ru">Sleep</span><span class="ti-en">Сон</span></button>
-      <div class="tiles">
-        <button class="tile t-feeding" onclick="goView('feeding')"><span class="ti-ico">🍼</span><span class="ti-ru">Feeding</span><span class="ti-en">Кормление</span></button>
-        <button class="tile t-water" onclick="goView('water')"><span class="ti-ico">💧</span><span class="ti-ru">Water</span><span class="ti-en">Питьё</span></button>
-        <button class="tile t-stool" onclick="goView('stool')"><span class="ti-ico">💩</span><span class="ti-ru">Stool</span><span class="ti-en">Стул</span></button>
-        <button class="tile t-solids" onclick="goView('solids')"><span class="ti-ico">🥦</span><span class="ti-ru">Solids</span><span class="ti-en">Прикорм</span></button>
-        <button class="tile t-meds" onclick="goView('meds')"><span class="ti-ico">💊</span><span class="ti-ru">Meds</span><span class="ti-en">Лекарства</span></button>
-        <button class="tile t-weight" onclick="goView('weight')"><span class="ti-ico">⚖️</span><span class="ti-ru">Weight</span><span class="ti-en">Вес</span></button>
+      <button class="wbar wb-sleep" onclick="goView('sleep')">
+        <div class="wb-ic"><svg class="icn icn-lg"><use href="#i-moon"/></svg></div>
+        <div class="wb-tx"><b>Sleep tracking</b><small>Сон</small></div>
+        <div class="wb-ar"><svg class="icn icn-sm"><use href="#i-arr"/></svg></div>
+      </button>
+      <div class="tiles-modern">
+        <button class="tile-modern t-feed" onclick="goView('feeding')">
+          <div class="tm-ic"><svg class="icn icn-lg"><use href="#i-bottle"/></svg></div>
+          <div class="tm-lb">Feeding</div><div class="tm-sub">Кормление</div>
+        </button>
+        <button class="tile-modern t-water" onclick="goView('water')">
+          <div class="tm-ic"><svg class="icn icn-lg"><use href="#i-water"/></svg></div>
+          <div class="tm-lb">Water</div><div class="tm-sub">Питьё</div>
+        </button>
+        <button class="tile-modern t-stool" onclick="goView('stool')">
+          <div class="tm-ic"><svg class="icn icn-lg"><use href="#i-stool"/></svg></div>
+          <div class="tm-lb">Stool</div><div class="tm-sub">Стул</div>
+        </button>
+        <button class="tile-modern t-solids" onclick="goView('solids')">
+          <div class="tm-ic"><svg class="icn icn-lg"><use href="#i-broccoli"/></svg></div>
+          <div class="tm-lb">Solids</div><div class="tm-sub">Прикорм</div>
+        </button>
+        <button class="tile-modern t-meds" onclick="goView('meds')">
+          <div class="tm-ic"><svg class="icn icn-lg"><use href="#i-pill"/></svg></div>
+          <div class="tm-lb">Meds</div><div class="tm-sub">Лекарства</div>
+        </button>
+        <button class="tile-modern t-weight" onclick="goView('weight')">
+          <div class="tm-ic"><svg class="icn icn-lg"><use href="#i-scale"/></svg></div>
+          <div class="tm-lb">Weight</div><div class="tm-sub">Вес</div>
+        </button>
       </div>
-      <button class="tile-wide t-eod" onclick="goView('eod')"><span class="ti-ico">🌙</span><span class="ti-ru">Daily summary</span><span class="ti-en">Итог дня</span></button>
+      <button class="wbar wb-eod" onclick="goView('eod')">
+        <div class="wb-ic"><svg class="icn icn-lg"><use href="#i-moon"/></svg></div>
+        <div class="wb-tx"><b>Daily summary</b><small>Итог дня</small></div>
+        <div class="wb-ar"><svg class="icn icn-sm"><use href="#i-arr"/></svg></div>
+      </button>
     </div>
     <div class="upcoming-card">
       <div class="up-hdr">📅 Upcoming / Предстоящие осмотры</div>
@@ -1190,10 +1354,10 @@ body.parents-mode .main{padding-bottom:calc(var(--nav-h) + 20px + var(--safe-bot
 <!-- Bottom nav -->
 <nav class="bnav">
   <button class="active" data-nav="home" onclick="goView('home')">
-    <span class="nv-ico">🏠</span><span class="nv-ru">Home</span><span class="nv-en">Главная</span>
+    <span class="nv-ico"><svg viewBox="0 0 24 24"><use href="#i-home"/></svg></span><span class="nv-ru">Home</span><span class="nv-en">Главная</span>
   </button>
   <button data-nav="history" onclick="goView('history')">
-    <span class="nv-ico">📊</span><span class="nv-ru">History</span><span class="nv-en">История</span>
+    <span class="nv-ico"><svg viewBox="0 0 24 24"><use href="#i-chart"/></svg></span><span class="nv-ru">History</span><span class="nv-en">История</span>
   </button>
 </nav>
 
@@ -2648,22 +2812,20 @@ function tsHHMM(ts){ return ts ? new Date(ts).toTimeString().slice(0,5) : ''; }
 let homeDate = todayISO();
 
 async function renderHome(){
-  const hd = document.getElementById('home-date');
-  if (hd){
+  // Modern greeting line: short date + "Today"/"Yesterday"
+  const dateLine = document.getElementById('home-date-line');
+  if (dateLine){
     const d = new Date(homeDate+'T12:00:00');
-    const en = d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
-    const ru = d.toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    const en = d.toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'});
+    const ru = d.toLocaleDateString('ru-RU',{weekday:'short',day:'numeric',month:'long'});
     const isToday = homeDate === todayISO();
+    dateLine.innerHTML = `${en}${isToday?' · today':''} <span style="opacity:.6">· ${ru}</span>`;
+  }
+  const nextBtn = document.getElementById('hn-next');
+  if (nextBtn){
     const canForward = homeDate < todayISO();
-    hd.innerHTML = `
-      <div class="home-nav">
-        <button class="hn-arr" onclick="navHomeDay(-1)" aria-label="prev">‹</button>
-        <div class="hn-center">
-          <div class="hd-ru">${en}${isToday?' · Today':''}</div>
-          <div class="hd-en">${ru.charAt(0).toUpperCase()+ru.slice(1)}</div>
-        </div>
-        <button class="hn-arr ${canForward?'':'dim'}" ${canForward?'':'disabled'} onclick="navHomeDay(1)" aria-label="next">›</button>
-      </div>`;
+    nextBtn.classList.toggle('dim', !canForward);
+    nextBtn.disabled = !canForward;
   }
   const root = document.getElementById('dual-summary');
   if (!root) return;
@@ -2734,29 +2896,52 @@ async function renderHome(){
     return `${w.weight_kg} kg<small>${when}</small>`;
   };
 
-  const row = (ru, en, fn) => {
-    const lv = fn(D.lev), mv = fn(D.mark);
-    const cls = v => v==='—' ? 'dr-v empty-v' : 'dr-v';
-    return `<div class="dual-row">
-      <div class="dr-l">${en}<span>${ru}</span></div>
-      <div class="${cls(lv)} lev">${lv}</div>
-      <div class="${cls(mv)} mark">${mv}</div>
-    </div>`;
+  // Status line per child (short summary of what's happening)
+  const statusLine = (d) => {
+    if (d.last && !d.last.end_time) return 'Sleeping since '+tsHHMM(d.last.start_time);
+    if (d.fCount > 0){
+      const f = d.fCount;
+      return `${f} ${f===1?'feed':'feeds'} · ${d.totalMl} ml`;
+    }
+    return 'No activity yet';
   };
+  // Strip HTML and ml suffix from value for compact display
+  const stripHtml = s => String(s||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+  const sleepShort = d => d.totalMin ? fmtDur(d.totalMin) : '—';
+  const medShort = d => d.totalExp ? `${d.given}/${d.totalExp}` : '—';
+  const feedShort = d => d.fCount ? d.fCount+'×' : '—';
 
+  root.className = 'dual-modern';
   root.innerHTML = `
-    <div class="dual-head">
-      <div></div>
-      <div class="dh lev">Lev<span>Лев</span></div>
-      <div class="dh mark">Mark<span>Марк</span></div>
+    <div class="dm-hdr">Today's Overview · Сегодня</div>
+    <div class="dm-kids">
+      <div class="dm-kid lev">
+        <div class="dm-pic"><svg class="icn icn-lg" style="color:#1A4A60"><use href="#i-baby"/></svg></div>
+        <div class="dm-info">
+          <div class="dm-name lev">Lev</div>
+          <div class="dm-st">${statusLine(D.lev)}</div>
+        </div>
+      </div>
+      <div class="dm-kid mark">
+        <div class="dm-pic"><svg class="icn icn-lg" style="color:#2E5A41"><use href="#i-baby"/></svg></div>
+        <div class="dm-info">
+          <div class="dm-name mark">Mark</div>
+          <div class="dm-st">${statusLine(D.mark)}</div>
+        </div>
+      </div>
     </div>
-    ${row('🍼 Кормления','🍼 Feeding', cFeed)}
-    ${row('💧 Питьё','💧 Water', cWater)}
-    ${row('🥦 Прикорм','🥦 Solids', cSolid)}
-    ${row('💊 Лекарства','💊 Meds', cMeds)}
-    ${row('💩 Стул','💩 Stool', cStool)}
-    ${row('😴 Сон','😴 Sleep', cSleep)}
-    ${row('⚖️ Вес','⚖️ Weight', cWeight)}
+    <div class="dm-nums">
+      <div class="dm-col">
+        <div class="dm-n"><div class="vv lev">${feedShort(D.lev)}</div><div class="ll">Feeds</div></div>
+        <div class="dm-n"><div class="vv lev">${sleepShort(D.lev)}</div><div class="ll">Sleep</div></div>
+        <div class="dm-n"><div class="vv lev">${medShort(D.lev)}</div><div class="ll">Meds</div></div>
+      </div>
+      <div class="dm-col">
+        <div class="dm-n"><div class="vv mark">${feedShort(D.mark)}</div><div class="ll">Feeds</div></div>
+        <div class="dm-n"><div class="vv mark">${sleepShort(D.mark)}</div><div class="ll">Sleep</div></div>
+        <div class="dm-n"><div class="vv mark">${medShort(D.mark)}</div><div class="ll">Meds</div></div>
+      </div>
+    </div>
   `;
 }
 
