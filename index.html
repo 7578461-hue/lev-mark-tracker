@@ -821,8 +821,8 @@ body[data-view="sleep"] .topbar{background:transparent;border-bottom:none}
 .dm-kid{display:flex;align-items:center;gap:10px;border-radius:14px;padding:10px;min-width:0}
 .dm-kid.lev{background:linear-gradient(135deg,#E7F2F8 0%,#D5E8F2 100%)}
 .dm-kid.mark{background:linear-gradient(135deg,#E7EFE9 0%,#D5E5D8 100%)}
-.dm-pic{width:52px;height:52px;border-radius:13px;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(0,30,60,.1)}
-.dm-pic svg{width:42px;height:42px;display:block}
+.dm-pic{width:52px;height:52px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:transparent;box-shadow:none}
+.dm-pic svg{width:52px;height:52px;display:block;border-radius:50%;box-shadow:0 2px 8px rgba(0,30,60,.1)}
 .dm-pic.lev{color:#1A4A60}
 .dm-pic.mark{color:#2E5A41}
 .dm-info{min-width:0;flex:1}
@@ -927,81 +927,16 @@ body[data-view="home"] .bnav button .nv-ico svg{width:22px;height:22px;display:b
   <symbol id="i-baby" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 9h.01M14 9h.01M10 12c.5.5 1.5 1 2 1s1.5-.5 2-1M12 15v4M9 19l-2 2M15 19l2 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
   <symbol id="i-arr" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="i-lion" viewBox="0 0 100 100">
-    <g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-      <!-- Mane: bold undulating outline, fewer but bigger lobes -->
-      <path d="M 50 5
-               C 58 4 63 10 62 16
-               C 72 10 82 16 80 26
-               C 92 26 95 38 87 44
-               C 96 50 92 62 84 62
-               C 89 72 80 80 71 76
-               C 71 86 60 89 54 83
-               C 52 91 48 91 46 83
-               C 40 89 29 86 29 76
-               C 20 80 11 72 16 62
-               C 8 62 4 50 13 44
-               C 5 38 8 26 20 26
-               C 18 16 28 10 38 16
-               C 37 10 42 4 50 5 Z"/>
-      <!-- Inner face oval -->
-      <ellipse cx="50" cy="56" rx="21" ry="22"/>
-      <!-- Ears -->
-      <path d="M 30 36 c -1 -5 3 -9 7 -8"/>
-      <path d="M 70 36 c 1 -5 -3 -9 -7 -8"/>
-      <!-- Brow lines -->
-      <path d="M 36 49 q 4 -2 9 1"/>
-      <path d="M 55 50 q 5 -3 9 -1"/>
-      <!-- Eyes -->
-      <circle cx="41" cy="56" r="2.5" fill="currentColor" stroke="none"/>
-      <circle cx="59" cy="56" r="2.5" fill="currentColor" stroke="none"/>
-      <!-- Cheek curves (jowls) -->
-      <path d="M 33 66 q 6 6 17 1"/>
-      <path d="M 67 66 q -6 6 -17 1"/>
-      <!-- Nose -->
-      <path d="M 45 65 L 55 65 L 50 71 Z" fill="currentColor" stroke="none"/>
-      <!-- Mouth -->
-      <path d="M 50 71 V 76"/>
-      <path d="M 50 76 q -3 4 -7 3"/>
-      <path d="M 50 76 q 3 4 7 3"/>
-    </g>
+    <path d="M50 5C24.6 5 4 25.6 4 51c0 25.4 20.6 46 46 46s46-20.6 46-46c0-25.4-20.6-46-46-46z" fill="#F0F4F8"/>
+    <path d="M50 15c-19.3 0-35 15.7-35 35 0 19.3 15.7 35 35 35 19.3 0 35-15.7 35-35 0-19.3-15.7-35-35-35zm0 65c-16.6 0-30-13.4-30-30 0-16.6 13.4-30 30-30 16.6 0 30 13.4 30 30 0 16.6-13.4 30-30 30z" fill="#2D5B7C"/>
+    <path d="M35 45c0-2.8 2.2-5 5-5s5 2.2 5 5-2.2 5-5 5-5-2.2-5-5zm20 0c0-2.8 2.2-5 5-5s5 2.2 5 5-2.2 5-5 5-5-2.2-5-5zM50 65c-5.5 0-10-4.5-10-10h20c0 5.5-4.5 10-10 10z" fill="#2D5B7C"/>
   </symbol>
   <symbol id="i-tiger" viewBox="0 0 100 100">
-    <g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-      <!-- Ears: pointed, bold -->
-      <path d="M 22 34 L 26 8 L 42 26 Z"/>
-      <path d="M 78 34 L 74 8 L 58 26 Z"/>
-      <!-- Face shape -->
-      <path d="M 20 36
-               C 20 22 30 18 50 18
-               C 70 18 80 22 80 36
-               L 80 56
-               C 80 78 67 92 50 92
-               C 33 92 20 78 20 56 Z"/>
-      <!-- Forehead stripes (thick) -->
-      <path d="M 33 22 C 35 30 33 36 31 40" stroke-width="3"/>
-      <path d="M 42 19 C 42 28 42 36 41 41" stroke-width="3"/>
-      <path d="M 50 17 V 41" stroke-width="3"/>
-      <path d="M 58 19 C 58 28 58 36 59 41" stroke-width="3"/>
-      <path d="M 67 22 C 65 30 67 36 69 40" stroke-width="3"/>
-      <!-- Cheek stripes (left) -->
-      <path d="M 23 48 q 6 -2 13 6" stroke-width="3"/>
-      <path d="M 21 60 q 8 -1 16 6" stroke-width="3"/>
-      <!-- Cheek stripes (right) -->
-      <path d="M 77 48 q -6 -2 -13 6" stroke-width="3"/>
-      <path d="M 79 60 q -8 -1 -16 6" stroke-width="3"/>
-      <!-- Eyes -->
-      <ellipse cx="38" cy="52" rx="3.4" ry="3.8" fill="currentColor" stroke="none"/>
-      <ellipse cx="62" cy="52" rx="3.4" ry="3.8" fill="currentColor" stroke="none"/>
-      <!-- Eye highlight -->
-      <circle cx="39.4" cy="51" r="1" fill="#fff" stroke="none"/>
-      <circle cx="63.4" cy="51" r="1" fill="#fff" stroke="none"/>
-      <!-- Nose -->
-      <path d="M 44 65 L 56 65 L 50 72 Z" fill="currentColor" stroke="none"/>
-      <!-- Mouth -->
-      <path d="M 50 72 V 77"/>
-      <path d="M 50 77 q -4 4 -8 3"/>
-      <path d="M 50 77 q 4 4 8 3"/>
-    </g>
+    <path d="M50 5C24.6 5 4 25.6 4 51c0 25.4 20.6 46 46 46s46-20.6 46-46c0-25.4-20.6-46-46-46z" fill="#F2F6F0"/>
+    <path d="M50 15c-19.3 0-35 15.7-35 35 0 19.3 15.7 35 35 35 19.3 0 35-15.7 35-35 0-19.3-15.7-35-35-35zm0 65c-16.6 0-30-13.4-30-30 0-16.6 13.4-30 30-30 16.6 0 30 13.4 30 30 0 16.6-13.4 30-30 30z" fill="#4A6741"/>
+    <path d="M32 40l5 5M68 40l-5 5M35 55l10 5M65 55l-10 5M50 30v10" stroke="#4A6741" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <circle cx="40" cy="50" r="4" fill="#4A6741"/>
+    <circle cx="60" cy="50" r="4" fill="#4A6741"/>
   </symbol>
 </defs></svg>
 
