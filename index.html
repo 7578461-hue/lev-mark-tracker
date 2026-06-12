@@ -833,13 +833,15 @@ body[data-view="sleep"] .topbar{background:transparent;border-bottom:none}
 .dm-info .dm-name.lev{color:#1A4A60}
 .dm-info .dm-name.mark{color:#2E5A41}
 .dm-info .dm-st{font-size:9.5px;color:#5a6778;margin-top:2px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dm-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
+.dm-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .dm-weight{margin-top:8px;padding-top:8px;border-top:.5px solid rgba(0,0,0,.08);text-align:center;font-size:10px;color:#5a6778;line-height:1.2}
 .dm-weight b{font-weight:800;color:#1a1d24;font-size:12px}
 .dm-stat{text-align:center;min-width:0}
 .dm-stat .stat-ico{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 4px}
 .dm-stat .stat-ico svg{width:18px;height:18px;display:block}
 .dm-stat.f-feed .stat-ico{background:#FCE0E0;color:#D85060}
+.dm-stat.f-water .stat-ico{background:#DDF0FA;color:#3A8FB5}
+.dm-stat.f-solids .stat-ico{background:#E0F0DC;color:#5C8B6F}
 .dm-stat.f-sleep .stat-ico{background:#E0EEF8;color:#4A88B8}
 .dm-stat.f-stool .stat-ico{background:transparent;color:#7A5A95}
 .dm-stat.f-stool .stat-ico img{width:34px;height:34px}
@@ -2996,6 +2998,8 @@ async function renderHome(){
   const feedShort = d => d.fCount ? d.fCount+'×' : '—';
 
   const stoolShort = d => d.poo ? `×${d.poo}` : '—';
+  const waterShort = d => d.wMl ? `${d.wMl}ml` : '—';
+  const solidsShort = d => d.sList && d.sList.length ? `${d.sList.length}×` : '—';
   const weightLine = (d) => {
     if (!d.lastWeight) return `<div class="dm-weight" style="color:#aab1ba">⚖️ no weight yet</div>`;
     const w = d.lastWeight;
@@ -3012,10 +3016,12 @@ async function renderHome(){
         </div>
       </div>
       <div class="dm-stats">
-        <div class="dm-stat f-feed"><div class="stat-ico"><svg viewBox="0 0 24 24"><use href="#i-bottle"/></svg></div><div class="vv">${feedShort(d)}</div><div class="ll">Feeds</div></div>
-        <div class="dm-stat f-sleep"><div class="stat-ico"><svg viewBox="0 0 24 24"><use href="#i-zz"/></svg></div><div class="vv">${sleepShort(d)}</div><div class="ll">Sleep</div></div>
-        <div class="dm-stat f-stool"><div class="stat-ico"><img src="diaper.svg" alt="" style="width:34px;height:34px;object-fit:contain"></div><div class="vv">${stoolShort(d)}</div><div class="ll">Stool</div></div>
-        <div class="dm-stat f-meds"><div class="stat-ico"><svg viewBox="0 0 24 24"><use href="#i-pill"/></svg></div><div class="vv">${medShort(d)}</div><div class="ll">Meds</div></div>
+        <div class="dm-stat f-feed"><div class="stat-ico"><svg viewBox="0 0 24 24"><use href="#i-bottle"/></svg></div><div class="vv">${feedShort(d)}</div><div class="ll">Milk · Молоко</div></div>
+        <div class="dm-stat f-water"><div class="stat-ico"><svg viewBox="0 0 24 24"><use href="#i-water"/></svg></div><div class="vv">${waterShort(d)}</div><div class="ll">Water · Вода</div></div>
+        <div class="dm-stat f-solids"><div class="stat-ico"><svg viewBox="0 0 24 24"><use href="#i-broccoli"/></svg></div><div class="vv">${solidsShort(d)}</div><div class="ll">Solids · Прикорм</div></div>
+        <div class="dm-stat f-sleep"><div class="stat-ico"><svg viewBox="0 0 24 24"><use href="#i-zz"/></svg></div><div class="vv">${sleepShort(d)}</div><div class="ll">Sleep · Сон</div></div>
+        <div class="dm-stat f-stool"><div class="stat-ico"><img src="diaper.svg" alt="" style="width:34px;height:34px;object-fit:contain"></div><div class="vv">${stoolShort(d)}</div><div class="ll">Stool · Стул</div></div>
+        <div class="dm-stat f-meds"><div class="stat-ico"><svg viewBox="0 0 24 24"><use href="#i-pill"/></svg></div><div class="vv">${medShort(d)}</div><div class="ll">Meds · Лек.</div></div>
       </div>
       ${weightLine(d)}
     </div>`;
