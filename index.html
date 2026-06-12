@@ -1028,7 +1028,7 @@ body[data-view="home"] .bnav button .nv-ico svg{width:22px;height:22px;display:b
           <div class="tm-lb">Water</div><div class="tm-sub">Питьё</div>
         </button>
         <button class="tile-modern t-stool" onclick="goView('stool')">
-          <div class="tm-ic"><svg class="icn icn-lg"><use href="#i-diaper"/></svg></div>
+          <div class="tm-ic"><img src="diaper.svg" alt="" style="width:26px;height:26px;object-fit:contain"></div>
           <div class="tm-lb">Stool</div><div class="tm-sub">Стул</div>
         </button>
         <button class="tile-modern t-solids" onclick="goView('solids')">
@@ -3004,7 +3004,7 @@ async function renderHome(){
       <div class="dm-stats">
         <div class="dm-stat f-feed"><div class="stat-ico"><svg viewBox="0 0 24 24"><use href="#i-bottle"/></svg></div><div class="vv">${feedShort(d)}</div><div class="ll">Feeds</div></div>
         <div class="dm-stat f-sleep"><div class="stat-ico"><svg viewBox="0 0 24 24"><use href="#i-zz"/></svg></div><div class="vv">${sleepShort(d)}</div><div class="ll">Sleep</div></div>
-        <div class="dm-stat f-stool"><div class="stat-ico"><svg viewBox="0 0 24 24"><use href="#i-diaper"/></svg></div><div class="vv">${stoolShort(d)}</div><div class="ll">Stool</div></div>
+        <div class="dm-stat f-stool"><div class="stat-ico"><img src="diaper.svg" alt="" style="width:20px;height:20px;object-fit:contain"></div><div class="vv">${stoolShort(d)}</div><div class="ll">Stool</div></div>
         <div class="dm-stat f-meds"><div class="stat-ico"><svg viewBox="0 0 24 24"><use href="#i-pill"/></svg></div><div class="vv">${medShort(d)}</div><div class="ll">Meds</div></div>
       </div>
     </div>`;
@@ -3713,7 +3713,7 @@ async function renderProfile(root){
         <div class="hs-trend">${avgFeedingsPerDay} feedings/d</div>
       </div>
       <div class="hero-stat s-stool">
-        <div class="hs-ico"><svg viewBox="0 0 24 24"><use href="#i-diaper"/></svg></div>
+        <div class="hs-ico"><img src="diaper.svg" alt="" style="width:24px;height:24px;object-fit:contain"></div>
         <div class="hs-num" ${!lastStoolDate?'style="font-size:14px;color:var(--hint)"':'style="font-size:18px"'}>${lastStoolStr}</div>
         <div class="hs-lbl">Last stool / Последний стул</div>
         <div class="hs-trend">${stoolHint||'no data'}</div>
