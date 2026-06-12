@@ -3258,6 +3258,12 @@ window.exportPDF = async function(){
 };
 
 window.pickHistoryDate = function(d){ historyDate = d; renderHistory(); };
+window.jumpToDay = function(date){
+  if (!date) return;
+  historySub = 'byday';
+  historyDate = date;
+  goView('history');
+};
 
 function renderTimelineEntry(ev){
   const {kind, time, e} = ev;
@@ -3863,7 +3869,7 @@ async function renderProfile(root){
   const svgH = padTop + hypDays.length * rowH + 8;
   const xH = h => labelW + h/24 * chartW;
   const rect = (iv, y, color) =>
-    `<rect x="${xH(iv.startH).toFixed(1)}" y="${y}" width="${((iv.endH-iv.startH)/24*chartW).toFixed(1)}" height="10" fill="${color}" ${iv.open?'opacity=".55"':''} rx="2"/>`;
+    `<rect x="${xH(iv.startH).toFixed(1)}" y="${y}" width="${((iv.endH-iv.startH)/24*chartW).toFixed(1)}" height="10" fill="${color}" ${iv.open?'opacity=".55"':''} rx="5" style="cursor:pointer" onclick="jumpToDay('${iv.date}')"><title>${iv.date} · click to view / нажмите чтобы открыть</title></rect>`;
   const gridLines = '[0,6,12,18,24]'.length;  // placeholder, build below
   const hourTicks = [0,6,12,18,24];
   const hypSvg = `<svg viewBox="0 0 ${labelW+chartW+10} ${svgH}" style="width:100%;height:auto;display:block">
@@ -3875,7 +3881,7 @@ async function renderProfile(root){
       const levRects  = ivLev .filter(iv => iv.date === d).map(iv => rect(iv, levY, '#2A6B88')).join('');
       const markRects = ivMark.filter(iv => iv.date === d).map(iv => rect(iv, markY, '#5C8B6F')).join('');
       const ds = fmtDateShortRU(d);
-      return `${gh}<text x="${labelW-6}" y="${y+18}" font-size="10" fill="var(--muted)" text-anchor="end">${ds.day} ${ds.mo}</text>${levRects}${markRects}`;
+      return `${gh}<text x="${labelW-6}" y="${y+18}" font-size="10" font-weight="600" fill="var(--muted)" text-anchor="end" style="cursor:pointer" onclick="jumpToDay('${d}')"><title>${d} · click to view</title>${ds.day} ${ds.mo}</text>${levRects}${markRects}`;
     }).join('')}
   </svg>`;
   const hypnoCard = `
@@ -3883,7 +3889,7 @@ async function renderProfile(root){
       <div style="display:flex;gap:14px;font-size:11px;color:var(--muted);margin-bottom:8px;flex-wrap:wrap">
         <span><span style="display:inline-block;width:14px;height:8px;background:#2A6B88;border-radius:2px;vertical-align:middle"></span> Lev / Лев</span>
         <span><span style="display:inline-block;width:14px;height:8px;background:#5C8B6F;border-radius:2px;vertical-align:middle"></span> Mark / Марк</span>
-        <span style="margin-left:auto;font-style:italic">Last ${hypDays.length} days · 24h</span>
+        <span style="margin-left:auto;font-style:italic">Last ${hypDays.length} days · 24h · 👆 tap to view</span>
       </div>
       ${hypSvg}
     </div>`;
@@ -3973,15 +3979,16 @@ function drawBarChart(canvasId, labels, data, color, unit){
   const padL=28, padR=8, padT=10, padB=22;
   const innerW = W-padL-padR, innerH = H-padT-padB;
   const max = Math.max(...data, 1);
-  const barGap = 2;
-  const barW = Math.max(2, innerW/data.length - barGap);
+  const barGap = 6;
+  const slot = innerW/data.length;
+  const barW = Math.max(3, slot - barGap);
   const col = getCssColor(color);
   const muted = getCssColor('var(--hint)');
   const text = getCssColor('var(--muted)');
 
-  // axis
-  ctx.strokeStyle = muted; ctx.globalAlpha = .25;
-  ctx.beginPath();
+  // grid lines
+  ctx.strokeStyle = muted; ctx.globalAlpha = .18;
+  ctx.lineWidth = 1; ctx.beginPath();
   for (let i=0;i<=3;i++){
     const y = padT + (innerH/3)*i;
     ctx.moveTo(padL, y); ctx.lineTo(W-padR, y);
@@ -3993,26 +4000,69 @@ function drawBarChart(canvasId, labels, data, color, unit){
     const v = Math.round(max - max/3*i);
     ctx.fillText(v, padL-4, padT + (innerH/3)*i + 3);
   }
-  // bars
+  // bars with rounded top + vertical gradient
   data.forEach((v,i) => {
     const h = max ? (v/max)*innerH : 0;
-    const x = padL + i*(innerW/data.length) + barGap/2;
+    const x = padL + i*slot + (slot-barW)/2;
     const y = padT + innerH - h;
-    ctx.fillStyle = v>0 ? col : muted;
-    ctx.globalAlpha = v>0 ? 1 : .25;
-    ctx.fillRect(x, y, barW, h);
+    if (h <= 0){
+      // empty placeholder: faint thin pill at bottom
+      ctx.fillStyle = muted; ctx.globalAlpha = .15;
+      const ph = 4; const py = padT + innerH - ph;
+      if (typeof ctx.roundRect === 'function'){
+        ctx.beginPath(); ctx.roundRect(x, py, barW, ph, [2,2,2,2]); ctx.fill();
+      } else {
+        ctx.fillRect(x, py, barW, ph);
+      }
+      ctx.globalAlpha = 1;
+      return;
+    }
+    // gradient: solid color at top → 65% at bottom
+    const grad = ctx.createLinearGradient(0, y, 0, y+h);
+    grad.addColorStop(0, col);
+    grad.addColorStop(1, hexWithAlpha(col, .55));
+    ctx.fillStyle = grad;
+    const r = Math.min(6, barW/2, h);
+    if (typeof ctx.roundRect === 'function'){
+      ctx.beginPath(); ctx.roundRect(x, y, barW, h, [r,r,0,0]); ctx.fill();
+    } else {
+      ctx.fillRect(x, y, barW, h);
+    }
   });
   ctx.globalAlpha = 1;
-  // X-axis: show every day for short periods, thin out only when crowded
+  // X-axis labels: show every day for short periods, thin out only when crowded
   const step = data.length <= 8 ? 1 : data.length <= 15 ? 2 : data.length <= 31 ? Math.ceil(data.length/8) : Math.ceil(data.length/6);
   ctx.fillStyle = text; ctx.font = '9px Inter,sans-serif'; ctx.textAlign='center';
   labels.forEach((d,i)=>{
     if (i%step!==0 && i!==labels.length-1) return;
-    const x = padL + i*(innerW/data.length) + barW/2;
+    const x = padL + i*slot + slot/2;
     const date = new Date(d+'T12:00:00');
     const lbl = String(date.getDate())+'/'+(date.getMonth()+1);
     ctx.fillText(lbl, x, H-6);
   });
+  // click → jump to that day in history
+  c.style.cursor = 'pointer';
+  c.onclick = (ev) => {
+    const rect = c.getBoundingClientRect();
+    const x = ev.clientX - rect.left;
+    const dataX = x - padL;
+    if (dataX < 0 || dataX > innerW) return;
+    const i = Math.floor(dataX / slot);
+    if (i >= 0 && i < labels.length && labels[i] && typeof window.jumpToDay === 'function') {
+      window.jumpToDay(labels[i]);
+    }
+  };
+}
+function hexWithAlpha(col, a){
+  // Convert any color string to rgba with given alpha
+  const tmp = document.createElement('div');
+  tmp.style.color = col;
+  document.body.appendChild(tmp);
+  const rgb = getComputedStyle(tmp).color;
+  document.body.removeChild(tmp);
+  const m = rgb.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+  if (!m) return col;
+  return `rgba(${m[1]},${m[2]},${m[3]},${a})`;
 }
 function drawLineChart(canvasId, labels, data, color, unit){
   const c = document.getElementById(canvasId); if (!c) return;
