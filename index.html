@@ -511,7 +511,8 @@ input:checked + .tog-tr::after{transform:translateX(22px)}
 .hero-stat .hs-ico svg{width:22px;height:22px;display:block}
 .hero-stat.s-weight  .hs-ico{background:#F4F0E5;color:#8A5F1A}
 .hero-stat.s-formula .hs-ico{background:#FCE4E4;color:#D85050}
-.hero-stat.s-stool   .hs-ico{background:#F0E5D8;color:#7A5030}
+.hero-stat.s-stool   .hs-ico{background:transparent;color:#7A5030}
+.hero-stat.s-stool .hs-ico img{width:40px;height:40px}
 .hero-stat.s-solids  .hs-ico{background:#E0F0DC;color:#5C8B6F}
 .hero-stat .hs-num{font-size:22px;font-weight:800;color:#1a1d24;line-height:1.1;letter-spacing:-.02em}
 .mark-active .hero-stat .hs-num{color:#1a1d24}
@@ -838,7 +839,8 @@ body[data-view="sleep"] .topbar{background:transparent;border-bottom:none}
 .dm-stat .stat-ico svg{width:18px;height:18px;display:block}
 .dm-stat.f-feed .stat-ico{background:#FCE0E0;color:#D85060}
 .dm-stat.f-sleep .stat-ico{background:#E0EEF8;color:#4A88B8}
-.dm-stat.f-stool .stat-ico{background:#EDE0F2;color:#7A5A95}
+.dm-stat.f-stool .stat-ico{background:transparent;color:#7A5A95}
+.dm-stat.f-stool .stat-ico img{width:34px;height:34px}
 .dm-stat.f-meds .stat-ico{background:#FCE6E0;color:#D86040}
 .dm-stat .vv{font-size:11px;font-weight:800;color:#1a1d24;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .dm-stat .ll{font-size:8px;color:#5a6778;margin-top:1px;line-height:1.1}
@@ -874,7 +876,8 @@ body[data-view="sleep"] .topbar{background:transparent;border-bottom:none}
 .tile-modern .tm-sub{font-size:9px;color:#5a6778}
 .tile-modern.t-feed .tm-ic{background:#FCE4E4;color:#D85050}
 .tile-modern.t-water .tm-ic{background:#DDF0FA;color:#3A8FB5}
-.tile-modern.t-stool .tm-ic{background:#F0E5D8;color:#7A5030}
+.tile-modern.t-stool .tm-ic{background:transparent;color:#7A5030}
+.tile-modern.t-stool .tm-ic img{width:48px;height:48px}
 .tile-modern.t-solids .tm-ic{background:#E0F0DC;color:#5C8B6F}
 .tile-modern.t-meds .tm-ic{background:#FFE0D5;color:#D87560}
 .tile-modern.t-weight .tm-ic{background:#F4F0E5;color:#8A5F1A}
@@ -1028,7 +1031,7 @@ body[data-view="home"] .bnav button .nv-ico svg{width:22px;height:22px;display:b
           <div class="tm-lb">Water</div><div class="tm-sub">Питьё</div>
         </button>
         <button class="tile-modern t-stool" onclick="goView('stool')">
-          <div class="tm-ic"><img src="diaper.svg" alt="" style="width:26px;height:26px;object-fit:contain"></div>
+          <div class="tm-ic"><img src="diaper.svg" alt="" style="width:48px;height:48px;object-fit:contain"></div>
           <div class="tm-lb">Stool</div><div class="tm-sub">Стул</div>
         </button>
         <button class="tile-modern t-solids" onclick="goView('solids')">
@@ -3004,7 +3007,7 @@ async function renderHome(){
       <div class="dm-stats">
         <div class="dm-stat f-feed"><div class="stat-ico"><svg viewBox="0 0 24 24"><use href="#i-bottle"/></svg></div><div class="vv">${feedShort(d)}</div><div class="ll">Feeds</div></div>
         <div class="dm-stat f-sleep"><div class="stat-ico"><svg viewBox="0 0 24 24"><use href="#i-zz"/></svg></div><div class="vv">${sleepShort(d)}</div><div class="ll">Sleep</div></div>
-        <div class="dm-stat f-stool"><div class="stat-ico"><img src="diaper.svg" alt="" style="width:20px;height:20px;object-fit:contain"></div><div class="vv">${stoolShort(d)}</div><div class="ll">Stool</div></div>
+        <div class="dm-stat f-stool"><div class="stat-ico"><img src="diaper.svg" alt="" style="width:34px;height:34px;object-fit:contain"></div><div class="vv">${stoolShort(d)}</div><div class="ll">Stool</div></div>
         <div class="dm-stat f-meds"><div class="stat-ico"><svg viewBox="0 0 24 24"><use href="#i-pill"/></svg></div><div class="vv">${medShort(d)}</div><div class="ll">Meds</div></div>
       </div>
     </div>`;
@@ -3713,7 +3716,7 @@ async function renderProfile(root){
         <div class="hs-trend">${avgFeedingsPerDay} feedings/d</div>
       </div>
       <div class="hero-stat s-stool">
-        <div class="hs-ico"><img src="diaper.svg" alt="" style="width:24px;height:24px;object-fit:contain"></div>
+        <div class="hs-ico"><img src="diaper.svg" alt="" style="width:40px;height:40px;object-fit:contain"></div>
         <div class="hs-num" ${!lastStoolDate?'style="font-size:14px;color:var(--hint)"':'style="font-size:18px"'}>${lastStoolStr}</div>
         <div class="hs-lbl">Last stool / Последний стул</div>
         <div class="hs-trend">${stoolHint||'no data'}</div>
