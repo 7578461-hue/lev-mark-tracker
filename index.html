@@ -934,8 +934,8 @@ body[data-view="home"] .bnav button .nv-ico svg{width:22px;height:22px;display:b
     <text x="16.5" y="6.5" font-size="4" font-weight="800" fill="currentColor" font-family="system-ui,sans-serif">z</text>
   </symbol>
   <symbol id="i-diaper" viewBox="0 0 24 24">
-    <path d="M4 7l4 1c2 .3 6 .3 8 0l4-1-1 6c-.3 2-1.5 3.5-3 4l-4 1-4-1c-1.5-.5-2.7-2-3-4L4 7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-    <path d="M9.5 9.5C10.5 11 13.5 11 14.5 9.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+    <path d="M3.5 6 C3.5 5.3 4 5 4.5 5 L19.5 5 C20 5 20.5 5.3 20.5 6 L20.5 11 C20.5 11.6 20 12 19.5 12 L18 12 C17 12 16 13 15 14 C14 15 13 16 12 16 C11 16 10 15 9 14 C8 13 7 12 6 12 L4.5 12 C4 12 3.5 11.6 3.5 11 Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+    <path d="M4.5 8.2 L19.5 8.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
   </symbol>
   <symbol id="i-lion" viewBox="0 0 100 100">
     <path d="M50 5C24.6 5 4 25.6 4 51c0 25.4 20.6 46 46 46s46-20.6 46-46c0-25.4-20.6-46-46-46z" fill="#F0F4F8"/>
@@ -1028,7 +1028,7 @@ body[data-view="home"] .bnav button .nv-ico svg{width:22px;height:22px;display:b
           <div class="tm-lb">Water</div><div class="tm-sub">Питьё</div>
         </button>
         <button class="tile-modern t-stool" onclick="goView('stool')">
-          <div class="tm-ic"><svg class="icn icn-lg"><use href="#i-stool"/></svg></div>
+          <div class="tm-ic"><svg class="icn icn-lg"><use href="#i-diaper"/></svg></div>
           <div class="tm-lb">Stool</div><div class="tm-sub">Стул</div>
         </button>
         <button class="tile-modern t-solids" onclick="goView('solids')">
@@ -3701,7 +3701,7 @@ async function renderProfile(root){
         <div class="hs-trend">${avgFeedingsPerDay} feedings/d</div>
       </div>
       <div class="hero-stat s-stool">
-        <div class="hs-ico"><svg viewBox="0 0 24 24"><use href="#i-stool"/></svg></div>
+        <div class="hs-ico"><svg viewBox="0 0 24 24"><use href="#i-diaper"/></svg></div>
         <div class="hs-num" ${!lastStoolDate?'style="font-size:14px;color:var(--hint)"':'style="font-size:18px"'}>${lastStoolStr}</div>
         <div class="hs-lbl">Last stool / Последний стул</div>
         <div class="hs-trend">${stoolHint||'no data'}</div>
