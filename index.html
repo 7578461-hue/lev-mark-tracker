@@ -377,17 +377,33 @@ input:checked + .tog-tr::after{transform:translateX(22px)}
 .mark-active .day-pill.on .dp-day{color:var(--mark)}
 
 .timeline-entry{
-  background:var(--surface);border:.5px solid var(--border);border-radius:var(--rlg);
-  margin-bottom:9px;overflow:hidden;
+  background:transparent;border:none;border-radius:0;
+  margin-bottom:0;overflow:visible;position:relative;
 }
-.te-view{display:flex;gap:10px;padding:13px}
-.te-time{min-width:46px;text-align:center;flex-shrink:0}
-.te-time-v{font-size:16px;font-weight:700;color:var(--text);line-height:1}
-.te-time-l{font-size:9px;color:var(--hint);margin-top:3px;line-height:1.2;text-transform:uppercase;letter-spacing:.05em}
-.te-body{flex:1;min-width:0}
-.te-kind{font-size:10px;font-weight:700;color:var(--hint);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
-.te-title{font-size:14px;font-weight:600;color:var(--text);line-height:1.3}
-.te-sub{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.4}
+.te-view{display:grid;grid-template-columns:46px 36px 1fr auto;gap:8px;padding:6px 4px;align-items:flex-start}
+.te-time{font-size:13px;font-weight:600;color:#5a6778;text-align:right;padding-top:8px;line-height:1.2;white-space:nowrap}
+.te-ico-col{position:relative;display:flex;justify-content:center;padding-top:4px;align-self:stretch}
+.te-ico-col::after{content:'';position:absolute;left:50%;top:0;bottom:-6px;width:1.5px;background:rgba(0,0,0,.08);transform:translateX(-.75px);z-index:0}
+.timeline-entry:last-child .te-ico-col::after{display:none}
+.te-ico{position:relative;z-index:1;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#fff;flex-shrink:0;box-shadow:0 1px 3px rgba(0,30,60,.06)}
+.te-ico svg{width:18px;height:18px}
+.te-ico img{width:24px;height:24px;object-fit:contain}
+.te-ico.k-formula{background:#FCE0E0;color:#D85060}
+.te-ico.k-water{background:#DDF0FA;color:#3A8FB5}
+.te-ico.k-stool{background:transparent;color:#7A5A95;box-shadow:none}
+.te-ico.k-sleep{background:#E0EEF8;color:#4A88B8}
+.te-ico.k-solid{background:#E0F0DC;color:#5C8B6F}
+.te-ico.k-med{background:#FCE6E0;color:#D86040}
+.te-ico.k-weight{background:#F4F0E5;color:#8A5F1A}
+.te-ico.k-summary{background:#EFE5F5;color:#7A5A95}
+.te-kind{display:none}
+.te-body{flex:1;min-width:0;padding-top:6px}
+.te-title{font-size:14px;font-weight:700;color:#1a1d24;line-height:1.25}
+.te-sub{font-size:12px;color:#5a6778;margin-top:2px;line-height:1.3}
+.te-side{display:flex;flex-direction:column;align-items:flex-end;gap:5px;padding-top:6px}
+.te-child{padding:4px 10px;border-radius:14px;font-size:11px;font-weight:700;line-height:1;white-space:nowrap}
+.te-child.lev{background:#E7F2F8;color:#1A4A60}
+.te-child.mark{background:#E7EFE9;color:#2E5A41}
 .te-note{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.5}
 .te-voice{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5;font-style:italic}
 .pills{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
@@ -3277,6 +3293,7 @@ function renderTimelineEntry(ev){
   const compId = kind+':'+e.id;
   const isEdit = expandedEdit===compId;
   let kindLbl='', title='', sub='', pills='', noteH='', voiceH='', photosH='';
+  let iconClass='k-formula', iconHtml=`<svg viewBox="0 0 24 24"><use href="#i-bottle"/></svg>`;
   switch (kind){
     case 'formula':{
       const total = (e.kabrita_ml||0)+(e.nutrilon_ml||0);
@@ -3284,6 +3301,8 @@ function renderTimelineEntry(ev){
       const isStoolOnly = total===0 && !e.water_ml && e.stool;
       if (isStoolOnly){
         kindLbl = 'Stool / 💩 Стул';
+        iconClass = 'k-stool';
+        iconHtml = `<img src="diaper.svg" alt="" style="width:34px;height:34px">`;
         const c = STOOL_COLORS.find(x=>x.k===e.stool_color);
         const cs = STOOL_CONS.find(x=>x.k===e.stool_consistency);
         title = [c?c.ico+' '+c.ru:'', cs?cs.ru:''].filter(Boolean).join(' · ') || 'Stool / Стул';
@@ -3306,11 +3325,15 @@ function renderTimelineEntry(ev){
     }
     case 'water':{
       kindLbl = 'Water / 💧 Питьё';
+      iconClass = 'k-water';
+      iconHtml = `<svg viewBox="0 0 24 24"><use href="#i-water"/></svg>`;
       title = `${e.ml||0} мл / ml`;
       break;
     }
     case 'sleep':{
       kindLbl = 'Sleep / 😴 Сон';
+      iconClass = 'k-sleep';
+      iconHtml = `<svg viewBox="0 0 24 24"><use href="#i-zz"/></svg>`;
       title = e.end_time
         ? `${tsHHMM(e.start_time)} – ${tsHHMM(e.end_time)}`
         : `Заснул в ${tsHHMM(e.start_time)} · спит / asleep`;
@@ -3327,6 +3350,8 @@ function renderTimelineEntry(ev){
     }
     case 'med':{
       kindLbl = 'Medication / 💊 Лекарство';
+      iconClass = 'k-med';
+      iconHtml = `<svg viewBox="0 0 24 24"><use href="#i-pill"/></svg>`;
       const m = (MED_SCHEDULE.morning.concat(MED_SCHEDULE.afternoon,MED_SCHEDULE.evening))
                   .find(x=>x.k===e.medication);
       title = m ? `${m.ru} ${m.dose(child)}` : e.medication;
@@ -3335,6 +3360,8 @@ function renderTimelineEntry(ev){
     }
     case 'solids':{
       kindLbl = 'Solids / 🥦 Прикорм';
+      iconClass = 'k-solid';
+      iconHtml = `<svg viewBox="0 0 24 24"><use href="#i-broccoli"/></svg>`;
       title = e.product;
       const amtStr = fmtAmount(e.amount);
       const ac = ACCS.find(x=>x.k===e.accept);
@@ -3348,11 +3375,15 @@ function renderTimelineEntry(ev){
     }
     case 'weight':{
       kindLbl = 'Weight / ⚖️ Вес';
+      iconClass = 'k-weight';
+      iconHtml = `<svg viewBox="0 0 24 24"><use href="#i-scale"/></svg>`;
       title = `${e.weight_kg} кг / kg`;
       break;
     }
     case 'summary':{
       kindLbl = 'Daily summary / 🌙 Итог дня';
+      iconClass = 'k-summary';
+      iconHtml = `<svg viewBox="0 0 24 24"><use href="#i-moon"/></svg>`;
       const moodObj = MOODS.find(m=>m.k===e.mood);
       const sleepObj = SLEEPS.find(s=>s.k===e.sleep);
       title = [moodObj?moodObj.ico+' '+moodObj.ru:'', sleepObj?sleepObj.ico+' '+sleepObj.ru:''].filter(Boolean).join(' · ') || 'Summary / Итог';
@@ -3376,19 +3407,26 @@ function renderTimelineEntry(ev){
   if (kind==='formula' && e.time_end){
     timeDisplay = escH(String(e.time||'').slice(0,5))+'–'+escH(String(e.time_end).slice(0,5));
   }
+  const ch = e.child;
+  const childPill = (ch==='lev' || ch==='mark')
+    ? `<div class="te-child ${ch}">${ch==='lev'?'Lev':'Mark'}</div>`
+    : '';
   return `<div class="timeline-entry">
     <div class="te-view">
-      <div class="te-time"><div class="te-time-v" style="font-size:${timeDisplay.length>5?'12px':'16px'}">${timeDisplay}</div><div class="te-time-l">time</div></div>
+      <div class="te-time">${timeDisplay}</div>
+      <div class="te-ico-col"><div class="te-ico ${iconClass}">${iconHtml}</div></div>
       <div class="te-body">
-        <div class="te-kind">${kindLbl}</div>
         <div class="te-title">${escH(title)}</div>
         ${sub?`<div class="te-sub">${escH(sub)}</div>`:''}
         ${pills?`<div class="pills">${pills}</div>`:''}
         ${noteH}${voiceH}${photosH}
       </div>
-      <div class="te-actions nanny-only">
-        ${editable?`<button class="act-btn edit-btn" onclick="openEdit('${kind}',${e.id})">✏️</button>`:''}
-        <button class="act-btn del-btn" onclick="delEntry('${kind}',${e.id})">✕</button>
+      <div class="te-side">
+        ${childPill}
+        <div class="te-actions nanny-only">
+          ${editable?`<button class="act-btn edit-btn" onclick="openEdit('${kind}',${e.id})">✏️</button>`:''}
+          <button class="act-btn del-btn" onclick="delEntry('${kind}',${e.id})">✕</button>
+        </div>
       </div>
     </div>
     ${isEdit ? buildEditBlock(kind, e) : ''}
