@@ -3290,7 +3290,15 @@ function renderTimelineEntry(ev){
       title = e.end_time
         ? `${tsHHMM(e.start_time)} – ${tsHHMM(e.end_time)}`
         : `Заснул в ${tsHHMM(e.start_time)} · спит / asleep`;
-      if (e.end_time) sub = fmtDur(sleepDurMin(e));
+      if (e.end_time){
+        const rawMin = Math.max(0,(new Date(e.end_time)-new Date(e.start_time))/60000);
+        if (rawMin > 960){
+          pills += `<span class="pill p-warn">⚠ ${fmtDur(rawMin)} — проверьте время / check times</span>`;
+          sub = '';
+        } else {
+          sub = fmtDur(rawMin);
+        }
+      }
       break;
     }
     case 'med':{
