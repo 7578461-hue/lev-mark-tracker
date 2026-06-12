@@ -887,18 +887,18 @@ body[data-view="sleep"] .topbar{background:transparent;border-bottom:none}
 .tile-modern.t-meds .tm-ic{background:#FFE0D5;color:#D87560}
 .tile-modern.t-weight .tm-ic{background:#F4F0E5;color:#8A5F1A}
 
-/* Modern bottom nav (round circles) */
-body[data-view="home"] .bnav{background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-top:.5px solid rgba(0,0,0,.06);padding:8px 12px calc(10px + var(--safe-bot));display:flex;gap:4px;justify-content:center}
-body[data-view="home"] .bnav button{
+/* Modern bottom nav (applies on all views) */
+.bnav{background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-top:.5px solid rgba(0,0,0,.06);padding:8px 12px calc(10px + var(--safe-bot));display:flex;gap:4px;justify-content:center}
+.bnav button{
   flex:1;min-height:54px;border-radius:14px;background:transparent;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
   color:#5a6778;padding:6px 4px;
 }
-body[data-view="home"] .bnav button.active{background:linear-gradient(135deg,#1A3550,#2A5478);color:#fff;box-shadow:0 4px 12px rgba(26,53,80,.25)}
-body[data-view="home"] .bnav button .nv-en{display:none}
-body[data-view="home"] .bnav button .nv-ru{font-size:11px;font-weight:700;line-height:1;display:block}
-body[data-view="home"] .bnav button .nv-ico{font-size:0;display:block}
-body[data-view="home"] .bnav button .nv-ico svg{width:22px;height:22px;display:block;margin:0 auto}
+.bnav button.active{background:linear-gradient(135deg,#1A3550,#2A5478);color:#fff;box-shadow:0 4px 12px rgba(26,53,80,.25)}
+.bnav button .nv-en{display:none}
+.bnav button .nv-ru{font-size:11px;font-weight:700;line-height:1;display:block}
+.bnav button .nv-ico{font-size:0;display:block}
+.bnav button .nv-ico svg{width:22px;height:22px;display:block;margin:0 auto}
 .inline-actions .ebtn{flex:1;padding:9px;border-radius:var(--rsm);border:.5px solid var(--bmd);background:var(--surface);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;touch-action:manipulation;color:var(--muted)}
 .inline-actions .ebtn-save{color:white;border-color:transparent}
 .inline-actions .ebtn-save.lev{background:var(--lev)}
