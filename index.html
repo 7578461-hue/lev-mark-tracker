@@ -678,7 +678,8 @@ body.parents-mode .main{padding-bottom:calc(var(--nav-h) + 20px + var(--safe-bot
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
   cursor:pointer;touch-action:manipulation;transition:transform .12s;font-family:inherit}
 .cp-btn:active{transform:scale(.97)}
-.cp-btn .cp-ava{font-size:48px;line-height:1}
+.cp-btn .cp-ava{font-size:0;line-height:1;width:64px;height:64px;display:inline-flex;align-items:center;justify-content:center;border-radius:14px;background:#fff;box-shadow:0 2px 8px rgba(0,30,60,.08)}
+.cp-btn .cp-ava img{width:52px;height:52px;object-fit:contain;display:block}
 .cp-btn .cp-ru{font-size:22px;font-weight:700}
 .cp-btn .cp-en{font-size:12px;color:var(--hint)}
 .cp-btn.lev{background:var(--lev-bg);border-color:var(--lev)}
@@ -1781,8 +1782,8 @@ window.renderChildPick = function(v){
   pick.innerHTML = `
     <div class="child-pick-hint">Кто? <span>Choose child</span></div>
     <div class="child-pick">
-      <button class="cp-btn lev" onclick="chooseChild('lev','${v}')"><span class="cp-ava">👶</span><span class="cp-ru">Lev</span><span class="cp-en">Лев</span></button>
-      <button class="cp-btn mark" onclick="chooseChild('mark','${v}')"><span class="cp-ava">👶</span><span class="cp-ru">Mark</span><span class="cp-en">Марк</span></button>
+      <button class="cp-btn lev" onclick="chooseChild('lev','${v}')"><span class="cp-ava"><img src="lion.svg" alt=""></span><span class="cp-ru">Lev</span><span class="cp-en">Лев</span></button>
+      <button class="cp-btn mark" onclick="chooseChild('mark','${v}')"><span class="cp-ava"><img src="tiger.svg" alt=""></span><span class="cp-ru">Mark</span><span class="cp-en">Марк</span></button>
     </div>`;
 };
 
