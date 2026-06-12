@@ -834,6 +834,8 @@ body[data-view="sleep"] .topbar{background:transparent;border-bottom:none}
 .dm-info .dm-name.mark{color:#2E5A41}
 .dm-info .dm-st{font-size:9.5px;color:#5a6778;margin-top:2px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .dm-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
+.dm-weight{margin-top:8px;padding-top:8px;border-top:.5px solid rgba(0,0,0,.08);text-align:center;font-size:10px;color:#5a6778;line-height:1.2}
+.dm-weight b{font-weight:800;color:#1a1d24;font-size:12px}
 .dm-stat{text-align:center;min-width:0}
 .dm-stat .stat-ico{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 4px}
 .dm-stat .stat-ico svg{width:18px;height:18px;display:block}
@@ -2994,6 +2996,12 @@ async function renderHome(){
   const feedShort = d => d.fCount ? d.fCount+'×' : '—';
 
   const stoolShort = d => d.poo ? `×${d.poo}` : '—';
+  const weightLine = (d) => {
+    if (!d.lastWeight) return `<div class="dm-weight" style="color:#aab1ba">⚖️ no weight yet</div>`;
+    const w = d.lastWeight;
+    const when = w.date === day ? 'today' : w.date.slice(5).split('-').reverse().join('/');
+    return `<div class="dm-weight">⚖️ <b>${w.weight_kg} kg</b> · ${when}</div>`;
+  };
   const kidCard = (k, d, src, label) => `
     <div class="dm-kid ${k}">
       <div class="dm-head">
@@ -3009,6 +3017,7 @@ async function renderHome(){
         <div class="dm-stat f-stool"><div class="stat-ico"><img src="diaper.svg" alt="" style="width:34px;height:34px;object-fit:contain"></div><div class="vv">${stoolShort(d)}</div><div class="ll">Stool</div></div>
         <div class="dm-stat f-meds"><div class="stat-ico"><svg viewBox="0 0 24 24"><use href="#i-pill"/></svg></div><div class="vv">${medShort(d)}</div><div class="ll">Meds</div></div>
       </div>
+      ${weightLine(d)}
     </div>`;
   root.className = 'dual-modern';
   root.innerHTML = `
