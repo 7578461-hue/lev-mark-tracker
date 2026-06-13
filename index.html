@@ -404,6 +404,8 @@ input:checked + .tog-tr::after{transform:translateX(22px)}
 .te-child{padding:4px 10px;border-radius:14px;font-size:11px;font-weight:700;line-height:1;white-space:nowrap}
 .te-child.lev{background:#E7F2F8;color:#1A4A60}
 .te-child.mark{background:#E7EFE9;color:#2E5A41}
+.day-header{font-size:12px;font-weight:800;color:#1A3550;text-transform:uppercase;letter-spacing:.06em;padding:14px 4px 8px;cursor:pointer;border-bottom:.5px solid rgba(0,0,0,.08);margin-bottom:4px}
+.day-header:first-child{padding-top:4px}
 .te-note{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.5}
 .te-voice{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5;font-style:italic}
 .pills{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
@@ -1490,6 +1492,7 @@ let viewStep = 'form';  // 'child' | 'form'  (for input screens)
 let child = 'lev';
 let historySub = 'byday';
 let historyDate = todayISO();
+let historyRange = 1; // 1 (single day), 7, 14, or 'all'
 let profilePeriod = 7;
 let exportPeriod = 7;
 
@@ -3164,52 +3167,101 @@ async function renderHistory(){
 
 // ─── BY DAY ───────────────────────────────────────────────
 async function renderHistoryByDay(root){
-  // build day strip (last 30 days, today first)
-  const days = [];
-  for (let i=0;i<30;i++){
-    const d = new Date(); d.setDate(d.getDate()-i);
-    days.push(dateISO(d));
-  }
-  let stripHtml = `<div class="day-strip">${days.map(d => {
-    const {day,mo} = fmtDateShortRU(d);
-    return `<button class="day-pill${d===historyDate?' on':''}" onclick="pickHistoryDate('${d}')">
-      <span class="dp-day">${day}</span><span class="dp-mo">${mo}</span>
-    </button>`;
-  }).join('')}</div>`;
+  // Period selector (1 day / 7 / 14 / All)
+  const periodSel = `<div class="prof-period" style="margin-bottom:10px">
+    ${[[1,'1 день · 1 day'],[7,'7 дн'],[14,'14 дн']].map(([v,l])=>`<button class="${historyRange===v?'on':''}" onclick="setHistoryRange(${v})">${l}</button>`).join('')}
+    <button class="${historyRange==='all'?'on':''}" onclick="setHistoryRange('all')">Всё / All</button>
+  </div>`;
 
-  // load all entries for selected day
+  // single-day mode: day strip + entries for that day
+  if (historyRange === 1){
+    const days = [];
+    for (let i=0;i<30;i++){
+      const d = new Date(); d.setDate(d.getDate()-i);
+      days.push(dateISO(d));
+    }
+    const stripHtml = `<div class="day-strip">${days.map(d => {
+      const {day,mo} = fmtDateShortRU(d);
+      return `<button class="day-pill${d===historyDate?' on':''}" onclick="pickHistoryDate('${d}')">
+        <span class="dp-day">${day}</span><span class="dp-mo">${mo}</span>
+      </button>`;
+    }).join('')}</div>`;
+
+    const [feeds, meds, solids, summaries, weights, water, sleep] = await Promise.all([
+      db.from(T_FORMULA).select('*').eq('child',child).eq('date',historyDate),
+      db.from(T_MEDS   ).select('*').eq('child',child).eq('date',historyDate),
+      db.from(T_SOLIDS ).select('*').eq('child',child).eq('date',historyDate),
+      db.from(T_SUMMARY).select('*').eq('child',child).eq('date',historyDate),
+      db.from(T_WEIGHT ).select('*').eq('child',child).eq('date',historyDate),
+      db.from(T_WATER  ).select('*').eq('child',child).eq('date',historyDate),
+      db.from(T_SLEEP  ).select('*').eq('child',child)
+        .gte('date', (()=>{const d=new Date(historyDate+'T12:00:00'); d.setDate(d.getDate()-1); return dateISO(d);})())
+        .lte('date', historyDate),
+    ]);
+    const events = [];
+    (feeds.data||[]).forEach(e => events.push({kind:'formula', time:e.time||'00:00', e}));
+    (water.data||[]).forEach(e => events.push({kind:'water',   time:e.time||'00:00', e}));
+    (meds.data ||[]).forEach(e => events.push({kind:'med',     time:e.given_at||'00:00', e}));
+    (solids.data||[]).forEach(e => events.push({kind:'solids',  time:e.time||'00:00', e}));
+    (sleep.data||[]).forEach(e => {
+      if (sleepBucketDate(e) === historyDate) events.push({kind:'sleep', time:tsHHMM(e.start_time)||'00:00', e});
+    });
+    (weights.data||[]).forEach(e => events.push({kind:'weight',  time:e.time||'00:00', e}));
+    (summaries.data||[]).forEach(e => events.push({kind:'summary', time:'23:59', e}));
+    events.sort((a,b) => a.time.localeCompare(b.time));
+    const bodyHtml = events.length
+      ? events.map(ev => renderTimelineEntry(ev)).join('')
+      : `<div class="empty">📓 В этот день записей нет<br>No entries for this day</div>`;
+    root.innerHTML = periodSel + stripHtml + bodyHtml + buildExportBar();
+    return;
+  }
+
+  // multi-day mode: 7 / 14 / all days, grouped by date with headers
+  const rangeDays = historyRange === 'all' ? 365 : historyRange;
+  const startDate = new Date(); startDate.setDate(startDate.getDate()-(rangeDays-1));
+  const startISO = dateISO(startDate);
+  const endISO = todayISO();
+  const sleepStart = (()=>{const d=new Date(startISO+'T12:00:00'); d.setDate(d.getDate()-1); return dateISO(d);})();
   const [feeds, meds, solids, summaries, weights, water, sleep] = await Promise.all([
-    db.from(T_FORMULA).select('*').eq('child',child).eq('date',historyDate),
-    db.from(T_MEDS   ).select('*').eq('child',child).eq('date',historyDate),
-    db.from(T_SOLIDS ).select('*').eq('child',child).eq('date',historyDate),
-    db.from(T_SUMMARY).select('*').eq('child',child).eq('date',historyDate),
-    db.from(T_WEIGHT ).select('*').eq('child',child).eq('date',historyDate),
-    db.from(T_WATER  ).select('*').eq('child',child).eq('date',historyDate),
-    // sleep query expanded ±1 day so wake-day bucketing catches cross-midnight intervals
-    db.from(T_SLEEP  ).select('*').eq('child',child)
-      .gte('date', (()=>{const d=new Date(historyDate+'T12:00:00'); d.setDate(d.getDate()-1); return dateISO(d);})())
-      .lte('date', historyDate),
+    db.from(T_FORMULA).select('*').eq('child',child).gte('date',startISO).lte('date',endISO),
+    db.from(T_MEDS   ).select('*').eq('child',child).gte('date',startISO).lte('date',endISO),
+    db.from(T_SOLIDS ).select('*').eq('child',child).gte('date',startISO).lte('date',endISO),
+    db.from(T_SUMMARY).select('*').eq('child',child).gte('date',startISO).lte('date',endISO),
+    db.from(T_WEIGHT ).select('*').eq('child',child).gte('date',startISO).lte('date',endISO),
+    db.from(T_WATER  ).select('*').eq('child',child).gte('date',startISO).lte('date',endISO),
+    db.from(T_SLEEP  ).select('*').eq('child',child).gte('date',sleepStart).lte('date',endISO),
   ]);
-  const events = [];
-  (feeds.data||[]).forEach(e => events.push({kind:'formula', time:e.time||'00:00', e}));
-  (water.data||[]).forEach(e => events.push({kind:'water',   time:e.time||'00:00', e}));
-  (meds.data ||[]).forEach(e => events.push({kind:'med',     time:e.given_at||'00:00', e}));
-  (solids.data||[]).forEach(e => events.push({kind:'solids',  time:e.time||'00:00', e}));
-  // bucket sleep entries by wake-day; only include ones whose bucket matches historyDate
+  const allEvents = [];
+  (feeds.data||[]).forEach(e => allEvents.push({kind:'formula', date:e.date, time:e.time||'00:00', e}));
+  (water.data||[]).forEach(e => allEvents.push({kind:'water',   date:e.date, time:e.time||'00:00', e}));
+  (meds.data ||[]).forEach(e => allEvents.push({kind:'med',     date:e.date, time:e.given_at||'00:00', e}));
+  (solids.data||[]).forEach(e => allEvents.push({kind:'solids',  date:e.date, time:e.time||'00:00', e}));
   (sleep.data||[]).forEach(e => {
-    if (sleepBucketDate(e) === historyDate) events.push({kind:'sleep', time:tsHHMM(e.start_time)||'00:00', e});
+    const wakeDate = sleepBucketDate(e);
+    if (wakeDate >= startISO && wakeDate <= endISO) {
+      allEvents.push({kind:'sleep', date:wakeDate, time:tsHHMM(e.start_time)||'00:00', e});
+    }
   });
-  (weights.data||[]).forEach(e => events.push({kind:'weight',  time:e.time||'00:00', e}));
-  (summaries.data||[]).forEach(e => events.push({kind:'summary', time:'23:59',          e}));
-  events.sort((a,b) => a.time.localeCompare(b.time));
+  (weights.data||[]).forEach(e => allEvents.push({kind:'weight',  date:e.date, time:e.time||'00:00', e}));
+  (summaries.data||[]).forEach(e => allEvents.push({kind:'summary', date:e.date, time:'23:59', e}));
 
+  const byDate = {};
+  allEvents.forEach(ev => { (byDate[ev.date] = byDate[ev.date] || []).push(ev); });
+  const sortedDates = Object.keys(byDate).sort((a,b) => b.localeCompare(a));
   let bodyHtml = '';
-  if (!events.length){
-    bodyHtml = `<div class="empty">📓 В этот день записей нет<br>No entries for this day</div>`;
+  if (!sortedDates.length){
+    bodyHtml = `<div class="empty">📓 За этот период нет записей<br>No entries for this period</div>`;
   } else {
-    bodyHtml = events.map(ev => renderTimelineEntry(ev)).join('');
+    sortedDates.forEach(d => {
+      const items = byDate[d].sort((a,b) => a.time.localeCompare(b.time));
+      bodyHtml += `<div class="day-header" onclick="jumpToDay('${d}')">${escH(fmtDateRU(d))}</div>`
+              + items.map(ev => renderTimelineEntry(ev)).join('');
+    });
   }
-  const exportBar = `<div class="export-bar">
+  root.innerHTML = periodSel + bodyHtml + buildExportBar();
+}
+function buildExportBar(){
+  return `<div class="export-bar">
     <div class="bi"><span class="bi-ru">Export period</span><span class="bi-en">/ Экспорт за период</span></div>
     <div class="export-period">
       ${[7,14,30].map(p=>`<button class="${exportPeriod===p?'on':''}" onclick="setExportPeriod(${p})">${p} дн</button>`).join('')}
@@ -3217,8 +3269,8 @@ async function renderHistoryByDay(root){
     </div>
     <button class="export-btn" onclick="exportPDF()">📄 Экспорт в PDF / Export to PDF</button>
   </div>`;
-  root.innerHTML = stripHtml + bodyHtml + exportBar;
 }
+window.setHistoryRange = function(r){ historyRange = r; renderHistory(); };
 window.setExportPeriod = function(p){ exportPeriod = p; renderHistory(); };
 
 window.exportPDF = async function(){
@@ -3401,11 +3453,12 @@ function renderTimelineEntry(ev){
   if (e.photo_urls && e.photo_urls.length){
     photosH = `<div class="te-photos">${e.photo_urls.map(u=>`<img src="${escH(u)}" loading="lazy" onclick="openPhoto('${escH(u)}')">`).join('')}</div>`;
   }
-  const editable = kind!=='summary'; // summary edit not implemented
-  // For feeding show "start–end" if both present
-  let timeDisplay = escH(time);
+  const editable = kind!=='summary';
+  // Always show just start HH:MM in te-time column for clean layout
+  const timeDisplay = escH(String(time).slice(0,5));
   if (kind==='formula' && e.time_end){
-    timeDisplay = escH(String(e.time||'').slice(0,5))+'–'+escH(String(e.time_end).slice(0,5));
+    const range = escH(String(e.time||'').slice(0,5))+'–'+escH(String(e.time_end).slice(0,5));
+    sub = sub ? `${range} · ${sub}` : range;
   }
   const ch = e.child;
   const childPill = (ch==='lev' || ch==='mark')
