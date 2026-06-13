@@ -3208,7 +3208,7 @@ async function renderHistoryByDay(root){
     });
     (weights.data||[]).forEach(e => events.push({kind:'weight',  time:e.time||'00:00', e}));
     (summaries.data||[]).forEach(e => events.push({kind:'summary', time:'23:59', e}));
-    events.sort((a,b) => a.time.localeCompare(b.time));
+    events.sort((a,b) => b.time.localeCompare(a.time));
     const bodyHtml = events.length
       ? events.map(ev => renderTimelineEntry(ev)).join('')
       : `<div class="empty">📓 В этот день записей нет<br>No entries for this day</div>`;
@@ -3253,7 +3253,7 @@ async function renderHistoryByDay(root){
     bodyHtml = `<div class="empty">📓 За этот период нет записей<br>No entries for this period</div>`;
   } else {
     sortedDates.forEach(d => {
-      const items = byDate[d].sort((a,b) => a.time.localeCompare(b.time));
+      const items = byDate[d].sort((a,b) => b.time.localeCompare(a.time));
       bodyHtml += `<div class="day-header" onclick="jumpToDay('${d}')">${escH(fmtDateRU(d))}</div>`
               + items.map(ev => renderTimelineEntry(ev)).join('');
     });
