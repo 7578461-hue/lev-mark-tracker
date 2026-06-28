@@ -1656,14 +1656,37 @@ function showMaltofer(c, _doseTime){
   const t = todayISO();
   return t >= '2026-06-05' && t <= '2026-06-19';
 }
+// Mark — ORVI / teething (педиатр КлабМед, осмотр 14.06.2026)
+function showMarkAcute(start, end){
+  return (c, _dt) => {
+    if (c !== 'mark') return false;
+    const t = todayISO();
+    return t >= start && t <= end;
+  };
+}
+const showNazivin   = showMarkAcute('2026-06-14','2026-06-17'); // 3-4 дня
+const showAquamaris = showMarkAcute('2026-06-14','2026-06-17');
+const showPinosol   = showMarkAcute('2026-06-14','2026-06-19'); // 5-7 дней
+const showIngaverin = showMarkAcute('2026-06-14','2026-06-18'); // 5 дней
+const showFenistil  = showMarkAcute('2026-06-14','2026-06-18'); // 5 дней
+const ACUTE = [
+  {k:'nazivin',   ico:'👃',ru:'Називин (бэби) — нос',         en:'Nazivin baby — nose',      dose:_=>'2 кап / 2 drops', show:showNazivin},
+  {k:'aquamaris', ico:'💧',ru:'Квикс / Аквамарис — туалет носа',en:'Saline rinse — nose',    dose:_=>'промыть / rinse', show:showAquamaris},
+  {k:'pinosol',   ico:'🌿',ru:'Пиносол — нос',                en:'Pinosol — nose',           dose:_=>'2 кап / 2 drops', show:showPinosol},
+  {k:'ingaverin', ico:'🥄',ru:'Ингаверин сироп',              en:'Ingaverin syrup',          dose:_=>'5 мл / 5 ml',     show:showIngaverin},
+  {k:'fenistil',  ico:'💊',ru:'Фенистил',                     en:'Fenistil',                 dose:_=>'4 кап / 4 drops', show:showFenistil},
+];
 const MED_SCHEDULE = {
   morning:   [{k:'maltofer',  ico:'💧',ru:'Maltofer',  en:'Мальтофер',         dose:_=>'5 drops / 5 капель', show:showMaltofer},
               {k:'folic',     ico:'💊',ru:'Folic acid',en:'Фолиевая кислота',  dose:_=>'¼ tab / ¼ таб'},
               {k:'vitd',      ico:'☀️',ru:'Vitamin D', en:'Витамин D',         dose:c=>vitdDose(c)},
-              {k:'emollient', ico:'🧴',ru:'Emollient', en:'Эмолент (Emolium/Avene)', dose:_=>'apply / нанести'}],
-  afternoon: [{k:'maltofer',  ico:'💧',ru:'Maltofer',  en:'Мальтофер',         dose:_=>'5 drops / 5 капель', show:showMaltofer}],
+              {k:'emollient', ico:'🧴',ru:'Emollient', en:'Эмолент (Emolium/Avene)', dose:_=>'apply / нанести'},
+              ...ACUTE],
+  afternoon: [{k:'maltofer',  ico:'💧',ru:'Maltofer',  en:'Мальтофер',         dose:_=>'5 drops / 5 капель', show:showMaltofer},
+              ...ACUTE],
   evening:   [{k:'maltofer',  ico:'💧',ru:'Maltofer',  en:'Мальтофер',         dose:_=>'5 drops / 5 капель', show:showMaltofer},
-              {k:'emollient', ico:'🧴',ru:'Emollient', en:'Эмолент (Emolium/Avene)', dose:_=>'apply / нанести'}],
+              {k:'emollient', ico:'🧴',ru:'Emollient', en:'Эмолент (Emolium/Avene)', dose:_=>'apply / нанести'},
+              ...ACUTE],
 };
 // Returns the schedule items for a child at a dose-time, filtered by per-med availability.
 function medsAt(child, doseTime){
