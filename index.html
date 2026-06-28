@@ -1666,15 +1666,13 @@ function showMarkAcute(start, end){
 }
 const showNazivin   = showMarkAcute('2026-06-28','2026-07-01'); // 3-4 дня
 const showAquamaris = showMarkAcute('2026-06-28','2026-07-01');
-const showPinosol   = showMarkAcute('2026-06-28','2026-07-04'); // 5-7 дней
-const showIngaverin = showMarkAcute('2026-06-28','2026-07-02'); // 5 дней
+const showSextafat  = showMarkAcute('2026-06-28','2026-07-02'); // 5 дней (нос + орально)
 const showFenistil  = showMarkAcute('2026-06-28','2026-07-02'); // 5 дней
 const ACUTE = [
-  {k:'nazivin',   ico:'👃',ru:'Називин (бэби) — нос',         en:'Nazivin baby — nose',      dose:_=>'2 кап / 2 drops', show:showNazivin},
-  {k:'aquamaris', ico:'💧',ru:'Квикс / Аквамарис — туалет носа',en:'Saline rinse — nose',    dose:_=>'промыть / rinse', show:showAquamaris},
-  {k:'pinosol',   ico:'🌿',ru:'Пиносол — нос',                en:'Pinosol — nose',           dose:_=>'2 кап / 2 drops', show:showPinosol},
-  {k:'ingaverin', ico:'🥄',ru:'Ингаверин сироп',              en:'Ingaverin syrup',          dose:_=>'5 мл / 5 ml',     show:showIngaverin},
-  {k:'fenistil',  ico:'💊',ru:'Фенистил',                     en:'Fenistil',                 dose:_=>'4 кап / 4 drops', show:showFenistil},
+  {k:'nazivin',   ico:'👃',ru:'Називин (бэби) — нос',         en:'Nazivin baby — nose',      dose:_=>'2 кап / 2 drops',       show:showNazivin},
+  {k:'aquamaris', ico:'💧',ru:'Квикс / Аквамарис — туалет носа',en:'Saline rinse — nose',    dose:_=>'промыть / rinse',       show:showAquamaris},
+  {k:'sextafat',  ico:'🌿',ru:'Секстафат — нос + орально',    en:'Sextafat — nose + oral',   dose:_=>'5 мл орально + капли в нос', show:showSextafat},
+  {k:'fenistil',  ico:'💊',ru:'Фенистил',                     en:'Fenistil',                 dose:_=>'4 кап / 4 drops',       show:showFenistil},
 ];
 const MED_SCHEDULE = {
   morning:   [{k:'maltofer',  ico:'💧',ru:'Maltofer',  en:'Мальтофер',         dose:_=>'5 drops / 5 капель', show:showMaltofer},
