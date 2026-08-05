@@ -452,6 +452,84 @@ input:checked + .tog-tr::after{transform:translateX(22px)}
 .tod-acts button{width:24px;height:20px;border:none;background:transparent;cursor:pointer;border-radius:5px;color:#8a8a8a;display:flex;align-items:center;justify-content:center;font-size:11px;padding:0;font-family:inherit}
 .tod-acts button:active{background:rgba(0,0,0,.08)}
 .tod-edit-pane{grid-column:1/-1;margin-top:8px;padding-top:8px;border-top:.5px solid rgba(0,0,0,.08)}
+
+/* ── STATS TAB ── */
+body[data-view="stats"]{background:linear-gradient(180deg,#E8EFF7 0%,#F2F6FA 55%,#FFF 100%)}
+body[data-view="stats"] .topbar,
+body[data-view="health"] .topbar{background:rgba(255,255,255,.88);backdrop-filter:blur(10px);border-bottom:.5px solid rgba(0,0,0,.06)}
+body[data-view="health"]{background:linear-gradient(180deg,#E8F2EC 0%,#F2F8F4 55%,#FFF 100%)}
+.inline-tabs .ctab.active:not(.lev):not(.mark){background:linear-gradient(135deg,#1A3550,#2A5478)}
+.inline-tabs .ctab.active:not(.lev):not(.mark) .ctab-main,
+.inline-tabs .ctab.active:not(.lev):not(.mark) .ctab-sub{color:#fff}
+.st-card{background:#fff;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,30,60,.06)}
+.st-head{display:flex;align-items:center;gap:9px;margin-bottom:4px}
+.st-head .ci{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.st-head .ct{font-size:14px;font-weight:800}
+.st-head .ct small{display:block;font-size:10.5px;color:#98a2ad;font-weight:600;margin-top:1px}
+.st-big{font-size:30px;font-weight:800;letter-spacing:-1px;line-height:1;margin-top:8px}
+.st-big small{font-size:15px;font-weight:700;color:#5a6778;letter-spacing:0}
+.st-verdict{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;margin-top:7px;padding:5px 11px;border-radius:10px}
+.st-verdict.ok{background:#E3F2E8;color:#2E7D4F}
+.st-verdict.warn{background:#FDF1DC;color:#C77700}
+.st-verdict.neu{background:#EEF1F5;color:#5a6778}
+.st-verdict .vr{font-size:11px;font-weight:600;color:#98a2ad}
+.st-card svg{display:block;width:100%;height:auto;margin-top:10px}
+.st-sect{font-size:12px;font-weight:800;color:#1A3550;text-transform:uppercase;letter-spacing:.08em;margin:16px 4px 8px;display:flex;gap:6px;align-items:center}
+.st-sect .vr{text-transform:none;letter-spacing:0;font-size:11px;font-weight:600;color:#98a2ad}
+.st-ins{display:flex;gap:9px;align-items:flex-start;padding:7px 0;font-size:13px;line-height:1.35}
+.st-ins+.st-ins{border-top:.5px solid rgba(0,0,0,.05)}
+.st-ins .dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.st-ins.ok .dot{background:#3BA968}
+.st-ins.info .dot{background:#4A88B8}
+.st-ins.warn .dot{background:#E8A020}
+.st-ins b{font-weight:700}
+.st-ins small{display:block;color:#98a2ad;font-size:11px}
+.st-ntab .nr{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;padding:7px 0;font-size:13px}
+.st-ntab .nr+.nr{border-top:.5px solid rgba(0,0,0,.05)}
+.st-ntab .nd{font-weight:700;color:#98a2ad;font-size:11.5px}
+.st-ntab .ni{font-weight:600;color:#5a6778;font-size:12.5px}
+.st-ntab .nv{font-weight:800}
+.st-naps{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.st-nap{background:#F5F1FC;border-radius:11px;padding:7px 11px;font-size:11.5px;font-weight:700;color:#5B3B95}
+.st-nap small{display:block;font-size:10px;font-weight:600;color:#8a7ab0}
+.st-nap.mk{background:#EAF1EC;color:#2E5A41}
+.st-nap.mk small{color:#7fa38c}
+.st-poo{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:12px}
+.st-pd{border-radius:12px;padding:8px 3px;text-align:center;background:#F4F6FA}
+.st-pd.ok{background:#EFF6F0}
+.st-pd.warn{background:#FDF1DC}
+.st-pd .w{font-size:9px;font-weight:700;color:#98a2ad}
+.st-pd .c{font-size:16px;font-weight:800;margin:3px 0 1px}
+.st-pd.warn .c{color:#C77700}
+.st-pd .cons{font-size:8.5px;color:#5a6778;font-weight:600;margin-top:3px}
+.st-pd .pl{font-size:9.5px;font-weight:800;line-height:1.35}
+.st-pd .pl.lv{color:#2A6B88}
+.st-pd .pl.mk{color:#4E7D5F}
+.st-pd .pl.no{color:#C77700}
+.st-avg2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.st-avg2 div{border-radius:12px;padding:8px;text-align:center;font-size:15px;font-weight:800}
+.st-avg2 .a-lev{background:#E7F2F8;color:#1A4A60}
+.st-avg2 .a-mark{background:#E7EFE9;color:#2E5A41}
+.st-avg2 small{display:block;font-size:9.5px;font-weight:700;color:#5a6778}
+.st-nh{font-size:10px;font-weight:800;margin-top:12px}
+.st-nh.lv{color:#2A6B88}
+.st-nh.mk{color:#4E7D5F}
+
+/* ── HEALTH TAB ── */
+.hl-row{display:grid;grid-template-columns:38px 1fr auto;gap:10px;align-items:center;padding:9px 0}
+.hl-row+.hl-row{border-top:.5px solid rgba(0,0,0,.05)}
+.hl-row .li{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;background:#F1F4F8}
+.hl-row .ln{font-size:13px;font-weight:800}
+.hl-row .ln small{display:block;font-size:10.5px;color:#98a2ad;font-weight:600}
+.hl-row .la{font-size:11px;font-weight:800;color:#1A4A60;white-space:nowrap}
+.hl-add{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:12px;margin-top:12px;border:1.5px dashed #B8C4D0;border-radius:14px;background:#F8FAFC;font-family:inherit;font-size:13px;font-weight:800;color:#1A4A60;cursor:pointer}
+.hl-med{display:grid;grid-template-columns:30px 1fr auto;gap:9px;align-items:center;padding:8px 0}
+.hl-med+.hl-med{border-top:.5px solid rgba(0,0,0,.05)}
+.hl-med .mi{font-size:16px;text-align:center}
+.hl-med .mn{font-size:12.5px;font-weight:800}
+.hl-med .mn small{display:block;font-size:10px;color:#98a2ad;font-weight:600}
+.hl-med .md{font-size:10px;font-weight:800;color:#5a6778;text-align:right}
+.hl-med .md .left{color:#C77700}
 .te-note{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.5}
 .te-voice{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5;font-style:italic}
 .pills{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
@@ -1491,6 +1569,39 @@ body[data-view="sleep"] .topbar{background:rgba(255,255,255,.88);backdrop-filter
     <div id="history-content"><div class="loading">Загрузка... / Loading...</div></div>
   </section>
 
+  <!-- ═══ STATS / АНАЛИТИКА ═══ -->
+  <section class="tab-pane" data-view="stats" id="pane-stats">
+    <div class="child-tabs inline-tabs">
+      <button class="ctab lev active" id="stab-lev" onclick="setStatsChild('lev')">
+        <span class="ctab-main">Lev</span><span class="ctab-sub">Лев</span>
+      </button>
+      <button class="ctab mark" id="stab-mark" onclick="setStatsChild('mark')">
+        <span class="ctab-main">Mark</span><span class="ctab-sub">Марк</span>
+      </button>
+      <button class="ctab" id="stab-both" onclick="setStatsChild('both')">
+        <span class="ctab-main">Both</span><span class="ctab-sub">Оба</span>
+      </button>
+    </div>
+    <div class="prof-period" style="margin-bottom:12px">
+      <button class="on" id="sper-7" onclick="setStatsPeriod(7)">Week · 7 дн</button>
+      <button id="sper-30" onclick="setStatsPeriod(30)">Month · 30 дн</button>
+    </div>
+    <div id="stats-content"><div class="loading">Загрузка... / Loading...</div></div>
+  </section>
+
+  <!-- ═══ HEALTH / МЕДКАРТА ═══ -->
+  <section class="tab-pane" data-view="health" id="pane-health">
+    <div class="child-tabs inline-tabs">
+      <button class="ctab lev active" id="htab2-lev" onclick="setHealthChild('lev')">
+        <span class="ctab-main">Lev</span><span class="ctab-sub">Лев</span>
+      </button>
+      <button class="ctab mark" id="htab2-mark" onclick="setHealthChild('mark')">
+        <span class="ctab-main">Mark</span><span class="ctab-sub">Марк</span>
+      </button>
+    </div>
+    <div id="health-content"><div class="loading">Загрузка... / Loading...</div></div>
+  </section>
+
 </main>
 
 <!-- Sticky save -->
@@ -1503,8 +1614,14 @@ body[data-view="sleep"] .topbar{background:rgba(255,255,255,.88);backdrop-filter
   <button class="active" data-nav="home" onclick="goView('home')">
     <span class="nv-ico"><svg viewBox="0 0 24 24"><use href="#i-home"/></svg></span><span class="nv-ru">Home</span><span class="nv-en">Главная</span>
   </button>
+  <button data-nav="stats" onclick="goView('stats')">
+    <span class="nv-ico"><svg viewBox="0 0 24 24"><use href="#i-chart"/></svg></span><span class="nv-ru">Stats</span><span class="nv-en">Аналитика</span>
+  </button>
+  <button data-nav="health" onclick="goView('health')">
+    <span class="nv-ico"><svg viewBox="0 0 24 24"><use href="#i-pill"/></svg></span><span class="nv-ru">Health</span><span class="nv-en">Медкарта</span>
+  </button>
   <button data-nav="history" onclick="goView('history')">
-    <span class="nv-ico"><svg viewBox="0 0 24 24"><use href="#i-chart"/></svg></span><span class="nv-ru">History</span><span class="nv-en">История</span>
+    <span class="nv-ico"><svg viewBox="0 0 24 24"><use href="#i-cal"/></svg></span><span class="nv-ru">History</span><span class="nv-en">История</span>
   </button>
 </nav>
 
@@ -1861,6 +1978,8 @@ function goView(v){
   updateSaveBar();
   if (v==='home') renderHome();
   if (v==='history') renderHistory();
+  if (v==='stats') renderStats();
+  if (v==='health') renderHealth();
 }
 
 function formEl(v){ return document.getElementById(v+'-form') || document.getElementById(v+'-form-wrap'); }
@@ -4405,6 +4524,475 @@ function updateConnBar(online){
 }
 window.addEventListener('online',  () => updateConnBar(true));
 window.addEventListener('offline', () => updateConnBar(false));
+
+// ═══════════════════════════════════════════════════════════════
+// STATS TAB (Аналитика)
+// ═══════════════════════════════════════════════════════════════
+let statsChild = 'lev';     // 'lev' | 'mark' | 'both'
+let statsPeriod = 7;        // 7 | 30
+
+window.setStatsChild = function(c){
+  statsChild = c;
+  document.getElementById('stab-lev').classList.toggle('active', c==='lev');
+  document.getElementById('stab-mark').classList.toggle('active', c==='mark');
+  document.getElementById('stab-both').classList.toggle('active', c==='both');
+  renderStats();
+};
+window.setStatsPeriod = function(p){
+  statsPeriod = p;
+  document.getElementById('sper-7').classList.toggle('on', p===7);
+  document.getElementById('sper-30').classList.toggle('on', p===30);
+  renderStats();
+};
+
+// tsp parser for solids amounts
+function amountTsp(v){
+  if (!v) return 0;
+  if (typeof v === 'string' && v.startsWith('c:')){
+    const [,num,unit] = v.split(':');
+    const n = parseFloat(num)||0;
+    if (unit==='tbsp') return n*3;
+    if (unit==='g' || unit==='ml') return n/5;
+    return n; // tsp
+  }
+  return parseFloat(v)||0;
+}
+const WD_EN = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+function wdShort(iso){ return WD_EN[new Date(iso+'T12:00:00').getDay()]; }
+
+// SVG bar chart with value labels (n<=10 shows numbers)
+function svgBars(data, labels, color, H, fmt){
+  const W=347,padL=6,padR=6,padT=16,padB=18;
+  const ih=H-padT-padB, iw=W-padL-padR;
+  const n=data.length, slot=iw/n, bw=Math.max(4,slot-(n<=10?12:3));
+  const max=Math.max(...data,0.001)*1.15;
+  const gid='g'+Math.random().toString(36).slice(2,8);
+  let s=`<svg viewBox="0 0 ${W} ${H}"><defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="${color}"/><stop offset="1" stop-color="${color}" stop-opacity=".55"/></linearGradient></defs>`;
+  data.forEach((v,i)=>{
+    const h=max?(v/max)*ih:0, x=padL+i*slot+(slot-bw)/2, y=padT+ih-h;
+    const last=i===n-1;
+    s+=`<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="${Math.min(7,bw/2)}" fill="url(#${gid})" ${last?'':'opacity=".82"'}/>`;
+    if (n<=10 && v>0) s+=`<text x="${(x+bw/2).toFixed(1)}" y="${(y-4).toFixed(1)}" font-size="10" font-weight="800" fill="${color}" text-anchor="middle">${fmt?fmt(v):Math.round(v)}</text>`;
+  });
+  const step = n<=10?1:Math.ceil(n/7);
+  labels.forEach((d,i)=>{
+    if (i%step!==0 && i!==n-1) return;
+    s+=`<text x="${(padL+i*slot+slot/2).toFixed(1)}" y="${H-4}" font-size="9.5" font-weight="${i===n-1?800:600}" fill="${i===n-1?'#1a1d24':'#98a2ad'}" text-anchor="middle">${d}</text>`;
+  });
+  return s+'</svg>';
+}
+// paired bars Lev vs Mark
+function svgPair(lev, mark, labels, H, maxV){
+  const W=347,padL=6,padR=6,padT=16,padB=18;
+  const ih=H-padT-padB, iw=W-padL-padR;
+  const n=lev.length, slot=iw/n, bw=Math.max(3,(slot-(n<=10?14:4))/2);
+  const max=(maxV||Math.max(...lev,...mark,0.001))*1.15;
+  let s=`<svg viewBox="0 0 ${W} ${H}">`;
+  for(let i=0;i<n;i++){
+    const x0=padL+i*slot+(slot-2*bw-2)/2;
+    const hL=(lev[i]/max)*ih, hM=(mark[i]/max)*ih;
+    const yL=padT+ih-hL, yM=padT+ih-hM;
+    s+=`<rect x="${x0.toFixed(1)}" y="${yL.toFixed(1)}" width="${bw.toFixed(1)}" height="${hL.toFixed(1)}" rx="4" fill="#2A6B88"/>`;
+    s+=`<rect x="${(x0+bw+2).toFixed(1)}" y="${yM.toFixed(1)}" width="${bw.toFixed(1)}" height="${hM.toFixed(1)}" rx="4" fill="#5C9B72"/>`;
+    if (n<=10){
+      if (lev[i]>0) s+=`<text x="${(x0+bw/2).toFixed(1)}" y="${(yL-3).toFixed(1)}" font-size="8" font-weight="800" fill="#2A6B88" text-anchor="middle">${Math.round(lev[i])}</text>`;
+      if (mark[i]>0) s+=`<text x="${(x0+bw+2+bw/2).toFixed(1)}" y="${(yM-3).toFixed(1)}" font-size="8" font-weight="800" fill="#4E7D5F" text-anchor="middle">${Math.round(mark[i])}</text>`;
+    }
+  }
+  const step = n<=10?1:Math.ceil(n/7);
+  labels.forEach((d,i)=>{
+    if (i%step!==0 && i!==n-1) return;
+    s+=`<text x="${(padL+i*slot+slot/2).toFixed(1)}" y="${H-4}" font-size="9.5" font-weight="600" fill="#98a2ad" text-anchor="middle">${d}</text>`;
+  });
+  return s+'</svg>';
+}
+// simple line with endpoints labeled
+function svgLine(series, H, color, unitFmt){
+  // series: [{d:iso, v:num}]
+  const W=347,padL=30,padR=8,padT=12,padB=18;
+  const ih=H-padT-padB, iw=W-padL-padR;
+  if (series.length<2) return '<div class="empty" style="padding:10px">Not enough data / Мало данных</div>';
+  const vals=series.map(p=>p.v);
+  const lo=Math.min(...vals), hi=Math.max(...vals);
+  const pad=(hi-lo)*0.25||0.1;
+  const l2=lo-pad, h2=hi+pad;
+  const x=i=>padL+i/(series.length-1)*iw;
+  const y=v=>padT+ih-(v-l2)/(h2-l2)*ih;
+  const pts=series.map((p,i)=>`${x(i).toFixed(1)},${y(p.v).toFixed(1)}`).join(' ');
+  let s=`<svg viewBox="0 0 ${W} ${H}">`;
+  s+=`<polygon points="${x(0)},${y(series[0].v)} ${pts} ${x(series.length-1)},${padT+ih} ${x(0)},${padT+ih}" fill="${color}" opacity=".07"/>`;
+  s+=`<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>`;
+  s+=`<circle cx="${x(0)}" cy="${y(series[0].v)}" r="4" fill="#fff" stroke="${color}" stroke-width="2.4"/>`;
+  const li=series.length-1;
+  s+=`<circle cx="${x(li)}" cy="${y(series[li].v)}" r="4.6" fill="${color}"/>`;
+  s+=`<text x="${x(0)}" y="${y(series[0].v)-9}" font-size="10.5" font-weight="800" fill="#98a2ad">${unitFmt(series[0].v)}</text>`;
+  s+=`<text x="${x(li)}" y="${y(series[li].v)-9}" font-size="11" font-weight="800" fill="${color}" text-anchor="end">${unitFmt(series[li].v)}</text>`;
+  const dl=iso=>{const d=new Date(iso+'T12:00:00');return d.toLocaleDateString('en',{month:'short',day:'numeric'});};
+  s+=`<text x="${x(0)}" y="${H-2}" font-size="9.5" fill="#98a2ad">${dl(series[0].d)}</text>`;
+  s+=`<text x="${x(li)}" y="${H-2}" font-size="9.5" font-weight="700" fill="#1a1d24" text-anchor="end">${dl(series[li].d)}</text>`;
+  return s+'</svg>';
+}
+
+// classify one child's sleep rows into nights (by wake day) + naps (by day)
+function splitSleep(rows){
+  const nights={}, naps={};
+  rows.forEach(e=>{
+    if (!e.start_time || !e.end_time) return;
+    const min = sleepDurMin(e); if (!min) return;
+    const st=new Date(e.start_time), en=new Date(e.end_time);
+    const crossMid = dateISO(st)!==dateISO(en);
+    const isNight = crossMid || (st.getHours()>=18 && min>=300);
+    const day = sleepBucketDate(e);
+    if (isNight){
+      // keep the longest night per wake-day
+      if (!nights[day] || nights[day].min<min) nights[day]={s:tsHHMM(e.start_time),e:tsHHMM(e.end_time),min};
+    } else {
+      (naps[day]=naps[day]||[]).push({s:tsHHMM(e.start_time),e:tsHHMM(e.end_time),min});
+    }
+  });
+  Object.values(naps).forEach(a=>a.sort((x,y)=>x.s.localeCompare(y.s)));
+  return {nights,naps};
+}
+
+async function fetchStatsData(startISO,endISO){
+  const sleepStart=(()=>{const d=new Date(startISO+'T12:00:00');d.setDate(d.getDate()-1);return dateISO(d);})();
+  const [F,S,WA,SL,WT]=await Promise.all([
+    db.from(T_FORMULA).select('*').gte('date',startISO).lte('date',endISO),
+    db.from(T_SOLIDS ).select('*').gte('date',startISO).lte('date',endISO),
+    db.from(T_WATER  ).select('*').gte('date',startISO).lte('date',endISO),
+    db.from(T_SLEEP  ).select('*').gte('date',sleepStart).lte('date',endISO),
+    db.from(T_WEIGHT ).select('*').lte('date',endISO).order('date',{ascending:true}).order('time',{ascending:true}),
+  ]);
+  return {F:F.data||[],S:S.data||[],WA:WA.data||[],SL:SL.data||[],WT:WT.data||[]};
+}
+
+function childSeries(D, c, dates){
+  const F=D.F.filter(e=>e.child===c), S=D.S.filter(e=>e.child===c),
+        WA=D.WA.filter(e=>e.child===c), SL=D.SL.filter(e=>e.child===c),
+        WT=D.WT.filter(e=>e.child===c);
+  const ml = dates.map(d=>F.filter(e=>e.date===d).reduce((s,e)=>s+(e.nutrilon_ml||0)+(e.kabrita_ml||0),0));
+  const tsp = dates.map(d=>S.filter(e=>e.date===d).reduce((s,e)=>s+amountTsp(e.amount),0));
+  const wml = dates.map(d=>WA.filter(e=>e.date===d).reduce((s,e)=>s+(e.ml||0),0));
+  const {nights,naps}=splitSleep(SL);
+  const stool = dates.map(d=>{
+    const rows=F.filter(e=>e.date===d && e.stool);
+    const cons = rows.map(r=>r.stool_consistency).filter(Boolean);
+    return {n:rows.length, cons: cons[cons.length-1]||''};
+  });
+  const wt = WT.map(w=>({d:w.date,v:parseFloat(w.weight_kg)})).filter(p=>!isNaN(p.v));
+  return {ml,tsp,wml,nights,naps,stool,wt,F,S,SL};
+}
+
+function avgNz(a){ const nz=a.filter(v=>v>0); return nz.length? nz.reduce((s,v)=>s+v,0)/nz.length : 0; }
+function halfTrend(a){ // % change 2nd half vs 1st half (non-zero only)
+  const h=Math.floor(a.length/2);
+  const f=avgNz(a.slice(0,h)), s=avgNz(a.slice(h));
+  if (!f||!s) return null;
+  return Math.round((s-f)/f*100);
+}
+function weightGainPerWeek(wt){
+  if (wt.length<2) return null;
+  const a=wt[0], b=wt[wt.length-1];
+  const days=(new Date(b.d)-new Date(a.d))/86400000;
+  if (days<3) return null;
+  return Math.round((b.v-a.v)*1000/days*7);
+}
+function stoolGapDays(stool){ // consecutive trailing zero-days
+  let g=0;
+  for (let i=stool.length-1;i>=0;i--){ if (stool[i].n===0) g++; else break; }
+  return g;
+}
+function bedtimeStability(nights, dates){
+  const times=dates.slice(-5).map(d=>nights[d]?nights[d].s:null).filter(Boolean);
+  if (times.length<3) return null;
+  const mins=times.map(t=>{const [h,m]=t.split(':').map(Number);let v=h*60+m; if(h<12) v+=1440; return v;});
+  const spread=Math.max(...mins)-Math.min(...mins);
+  return {spread, from:times.reduce((a,b)=>a<b?a:b), to:times.reduce((a,b)=>a>b?a:b)};
+}
+
+function buildInsights(name, cs){
+  const out=[];
+  const g=weightGainPerWeek(cs.wt);
+  if (g!==null){
+    if (g>=90 && g<=180) out.push({cls:'ok', en:`${name}weight +${g} g/week — on track`, ru:`вес +${g} г/нед — в норме`});
+    else if (g<90) out.push({cls:'warn', en:`${name}weight +${g} g/week — below usual`, ru:`вес +${g} г/нед — меньше обычного, скажите врачу`});
+    else out.push({cls:'ok', en:`${name}weight +${g} g/week`, ru:`вес +${g} г/нед`});
+  }
+  const gap=stoolGapDays(cs.stool);
+  if (gap>=2) out.push({cls:'warn', en:`${name}no stool for ${gap} days`, ru:`стула нет ${gap} дн — наблюдаем, при 3+ днях к врачу`});
+  const bt=bedtimeStability(cs.nights, statsDates);
+  if (bt && bt.spread<=30) out.push({cls:'ok', en:`${name}bedtime steady ${bt.from}–${bt.to}`, ru:`засыпание стабильно последние дни`});
+  const tf=halfTrend(cs.ml), ts=halfTrend(cs.tsp);
+  if (tf!==null && ts!==null && tf<-5 && ts>5) out.push({cls:'ok', en:`${name}formula ${tf}%, solids +${ts}% — solids replacing formula`, ru:`смесь ${tf}%, прикорм +${ts}% — идёт замещение`});
+  return out;
+}
+
+let statsDates=[];
+async function renderStats(){
+  const root=document.getElementById('stats-content');
+  if (!root) return;
+  root.innerHTML='<div class="loading">Загрузка... / Loading...</div>';
+  const end=todayISO();
+  const start=(()=>{const d=new Date();d.setDate(d.getDate()-(statsPeriod-1));return dateISO(d);})();
+  const dates=[]; for(let i=0;i<statsPeriod;i++){const d=new Date(start+'T12:00:00');d.setDate(d.getDate()+i);dates.push(dateISO(d));}
+  statsDates=dates;
+  const labels=dates.map(d=>statsPeriod<=7?wdShort(d):String(new Date(d+'T12:00:00').getDate()));
+  let D;
+  try{ D=await fetchStatsData(start,end); }
+  catch(e){ root.innerHTML='<div class="empty">Load error / Ошибка загрузки</div>'; return; }
+
+  const gridLast7 = dates.slice(-7);
+
+  if (statsChild!=='both'){
+    const cs=childSeries(D, statsChild, dates);
+    const ins=buildInsights('', cs);
+    const insH = ins.length? `<div class="st-card">${ins.map(i=>`<div class="st-ins ${i.cls}"><span class="dot"></span><div><b>${i.en}</b><small>${i.ru}</small></div></div>`).join('')}</div>` : '';
+    const avgMl=Math.round(avgNz(cs.ml)), avgTsp=+(avgNz(cs.tsp).toFixed(1)), avgW=Math.round(avgNz(cs.wml));
+    const tf=halfTrend(cs.ml), tsp=halfTrend(cs.tsp);
+    const nightDays=gridLast7.filter(d=>cs.nights[d]);
+    const avgNight=nightDays.length? nightDays.reduce((s,d)=>s+cs.nights[d].min,0)/nightDays.length : 0;
+    const napToday=cs.naps[end]||[];
+    const napTotByDay=gridLast7.map(d=>(cs.naps[d]||[]).reduce((s,n)=>s+n.min,0)/60);
+    const stool7=gridLast7.map((d,i)=>cs.stool[dates.indexOf(d)]);
+    const stoolTotal=stool7.reduce((s,x)=>s+x.n,0);
+    const g=weightGainPerWeek(cs.wt);
+    const wtSeries=cs.wt.filter(p=>p.d>=start);
+
+    root.innerHTML = insH + `
+      <div class="st-sect">🍽 Food <span class="vr">· еда</span></div>
+      <div class="st-card">
+        <div class="st-head"><div class="ci" style="background:#FCE0E0">🍼</div><div class="ct">Formula <small>daily volume, ml · смесь</small></div></div>
+        <div class="st-big">${avgMl} <small>ml/day avg</small></div>
+        ${tf!==null?`<span class="st-verdict ${tf<-5?'ok':'neu'}">${tf>0?'↑ +':'↓ '}${tf}% vs prev <span class="vr">· к прошлому периоду</span></span>`:''}
+        ${svgBars(cs.ml,labels,'#D85060',130)}
+      </div>
+      <div class="st-card">
+        <div class="st-head"><div class="ci" style="background:#E0F0DC">🥦</div><div class="ct">Solids <small>grams per day · прикорм, г</small></div></div>
+        <div class="st-big">${Math.round(avgTsp*5)} <small>g/day avg · ≈${Math.round(avgTsp)} tsp</small></div>
+        ${tsp!==null?`<span class="st-verdict ${tsp>5?'ok':'neu'}">${tsp>0?'↑ +':''}${tsp}% vs prev</span>`:''}
+        ${svgBars(cs.tsp.map(v=>Math.round(v*5)),labels,'#5C8B6F',130)}
+      </div>
+      <div class="st-card">
+        <div class="st-head"><div class="ci" style="background:#DDF0FA">💧</div><div class="ct">Water <small>ml per day · питьё</small></div></div>
+        <div class="st-big">${avgW} <small>ml/day avg</small></div>
+        ${svgBars(cs.wml,labels,'#3A8FB5',110)}
+      </div>
+
+      <div class="st-sect">😴 Sleep <span class="vr">· сон</span></div>
+      <div class="st-card">
+        <div class="st-head"><div class="ci" style="background:#E8E0F5">🌙</div><div class="ct">Night sleep <small>bedtime → wake · ночной сон</small></div></div>
+        <div class="st-big">${avgNight?fmtDur(avgNight):'—'} <small>avg</small></div>
+        <div class="st-ntab">
+          ${gridLast7.slice().reverse().map(d=>{
+            const n=cs.nights[d];
+            const open = d===end && !n && (cs.SL.some(e=>!e.end_time));
+            return `<div class="nr"><span class="nd">${wdShort(d)}</span><span class="ni">${n?`${n.s} → ${n.e}`:(open?'sleeping now…':'—')}</span><span class="nv">${n?fmtDur(n.min):''}</span></div>`;
+          }).join('')}
+        </div>
+      </div>
+      <div class="st-card">
+        <div class="st-head"><div class="ci" style="background:#FDF3DC">☀️</div><div class="ct">Day naps <small>intervals · дневные сны</small></div></div>
+        <div class="st-big">${fmtDur(Math.round(avgNz(napTotByDay)*60))} <small>avg · ${napToday.length} naps today</small></div>
+        ${napToday.length?`<div style="font-size:11px;font-weight:800;color:#5a6778;margin-top:10px">TODAY · сегодня:</div>
+        <div class="st-naps">${napToday.map(n=>`<div class="st-nap">${n.s}–${n.e}<small>${fmtDur(n.min)}</small></div>`).join('')}</div>`:''}
+        ${svgBars(napTotByDay.map(v=>+v.toFixed(1)),gridLast7.map(wdShort),'#C89448',120,v=>v.toFixed(1)+'h')}
+      </div>
+
+      <div class="st-sect">🩲 Stool <span class="vr">· стул (last 7 days)</span></div>
+      <div class="st-card">
+        <div class="st-head"><div class="ci"><img src="diaper.svg" alt="" style="width:30px;height:30px"></div><div class="ct">Stool — daily <small>times · consistency</small></div></div>
+        <div class="st-big">${stoolTotal} <small>times / 7 days</small></div>
+        ${stoolGapDays(cs.stool)>=2?`<span class="st-verdict warn">⚠ no stool ${stoolGapDays(cs.stool)} days <span class="vr">· нет ${stoolGapDays(cs.stool)} дн</span></span>`:`<span class="st-verdict ok">✓ regular <span class="vr">· регулярно</span></span>`}
+        <div class="st-poo">
+          ${gridLast7.map((d,i)=>{const x=stool7[i];
+            return `<div class="st-pd ${x.n?'ok':'warn'}"><div class="w">${wdShort(d)}</div><div class="c">${x.n}</div><div class="cons">${x.n?(x.cons||'—'):'none'}</div></div>`;}).join('')}
+        </div>
+      </div>
+
+      <div class="st-sect">⚖️ Weight <span class="vr">· вес</span></div>
+      <div class="st-card">
+        <div class="st-head"><div class="ci" style="background:#F4F0E5">⚖️</div><div class="ct">Weight <small>вес, кг</small></div></div>
+        <div class="st-big">${cs.wt.length?cs.wt[cs.wt.length-1].v.toFixed(2):'—'} <small>kg</small></div>
+        ${g!==null?`<span class="st-verdict ${g>=90&&g<=180?'ok':'neu'}">${g>=90&&g<=180?'✓':''} +${g} g/week <span class="vr">· ${g>=90&&g<=180?'растёт как надо':'прибавка'}</span></span>`:''}
+        ${svgLine(wtSeries.length>=2?wtSeries:cs.wt.slice(-6), 100, '#8A5F1A', v=>v.toFixed(2))}
+      </div>`;
+  } else {
+    // ═══ BOTH MODE ═══
+    const L=childSeries(D,'lev',dates), M=childSeries(D,'mark',dates);
+    const insL=buildInsights('Lev: ',L).map(i=>({...i}));
+    const insM=buildInsights('Mark: ',M).map(i=>({...i}));
+    const ins=[...insL,...insM].slice(0,5);
+    const insH = ins.length? `<div class="st-card">${ins.map(i=>`<div class="st-ins ${i.cls}"><span class="dot"></span><div><b>${i.en}</b><small>${i.ru}</small></div></div>`).join('')}</div>` : '';
+    const nightRow=(d)=>{
+      const nl=L.nights[d], nm=M.nights[d];
+      const cell=(n,cls)=>n?`<span class="n2c ${cls}"><span class="nv" style="font-weight:800;font-size:13px;color:${cls==='lv'?'#2A6B88':'#4E7D5F'}">${fmtDur(n.min)}</span><br><span style="font-size:9.5px;color:#98a2ad;font-weight:600">${n.s} → ${n.e}</span></span>`:'<span style="color:#98a2ad">—</span>';
+      return `<div class="nr" style="display:grid;grid-template-columns:38px 1fr 1fr;gap:8px;align-items:center;padding:6px 0;border-top:.5px solid rgba(0,0,0,.05)">
+        <span class="nd">${wdShort(d)}</span>${cell(nl,'lv')}${cell(nm,'mk')}</div>`;
+    };
+    const napChips=(naps,cls)=> (naps||[]).map(n=>`<div class="st-nap ${cls==='mk'?'mk':''}">${n.s}–${n.e}<small>${fmtDur(n.min)}</small></div>`).join('') || '<span style="font-size:11px;color:#98a2ad">—</span>';
+    const end7=gridLast7;
+    const stoolCell=(d)=>{
+      const li=dates.indexOf(d);
+      const sl=L.stool[li], sm=M.stool[li];
+      const warn=!sl.n||!sm.n;
+      return `<div class="st-pd ${warn?'warn':'ok'}"><div class="w">${wdShort(d)}</div>
+        <div class="pl lv">L ${sl.n||0}</div><div class="pl ${sm.n?'mk':'no'}">M ${sm.n||0}</div></div>`;
+    };
+    const wtL=L.wt.slice(-1)[0], wtM=M.wt.slice(-1)[0];
+    const gL=weightGainPerWeek(L.wt), gM=weightGainPerWeek(M.wt);
+    root.innerHTML = insH + `
+      <div class="st-sect">🍽 Food <span class="vr">· еда, оба</span></div>
+      <div class="st-card">
+        <div class="st-head"><div class="ci" style="background:#FCE0E0">🍼</div><div class="ct">Formula <small>ml by day, both</small></div></div>
+        ${svgPair(L.ml,M.ml,labels,140)}
+        <div class="st-avg2">
+          <div class="a-lev">${Math.round(avgNz(L.ml))} ml<small>Lev avg/day</small></div>
+          <div class="a-mark">${Math.round(avgNz(M.ml))} ml<small>Mark avg/day</small></div>
+        </div>
+      </div>
+      <div class="st-card">
+        <div class="st-head"><div class="ci" style="background:#E0F0DC">🥦</div><div class="ct">Solids <small>grams by day, both · г</small></div></div>
+        ${svgPair(L.tsp.map(v=>Math.round(v*5)),M.tsp.map(v=>Math.round(v*5)),labels,140)}
+        <div class="st-avg2">
+          <div class="a-lev">${Math.round(avgNz(L.tsp)*5)} g<small>Lev avg/day</small></div>
+          <div class="a-mark">${Math.round(avgNz(M.tsp)*5)} g<small>Mark avg/day</small></div>
+        </div>
+      </div>
+
+      <div class="st-sect">😴 Night sleep <span class="vr">· ночной сон, оба</span></div>
+      <div class="st-card">
+        <div style="display:grid;grid-template-columns:38px 1fr 1fr;gap:8px;font-size:10px;font-weight:800">
+          <span></span><span style="color:#2A6B88">Lev</span><span style="color:#4E7D5F">Mark</span>
+        </div>
+        ${end7.slice().reverse().map(nightRow).join('')}
+      </div>
+
+      <div class="st-sect">☀️ Day naps today <span class="vr">· сегодня</span></div>
+      <div class="st-card">
+        <div class="st-nh lv">LEV · ${(L.naps[end]||[]).length} naps</div>
+        <div class="st-naps">${napChips(L.naps[end],'lv')}</div>
+        <div class="st-nh mk">MARK · ${(M.naps[end]||[]).length} naps</div>
+        <div class="st-naps">${napChips(M.naps[end],'mk')}</div>
+      </div>
+
+      <div class="st-sect">🩲 Stool <span class="vr">· стул, оба (7 дн)</span></div>
+      <div class="st-card">
+        <div class="st-poo">${end7.map(stoolCell).join('')}</div>
+      </div>
+
+      <div class="st-sect">⚖️ Weight <span class="vr">· вес, оба</span></div>
+      <div class="st-card">
+        <div class="st-avg2">
+          <div class="a-lev">${wtL?wtL.v.toFixed(2):'—'} kg<small>Lev${gL!==null?` · +${gL} g/wk`:''}</small></div>
+          <div class="a-mark">${wtM?wtM.v.toFixed(2):'—'} kg<small>Mark${gM!==null?` · +${gM} g/wk`:''}</small></div>
+        </div>
+      </div>`;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// HEALTH TAB (Медкарта)
+// ═══════════════════════════════════════════════════════════════
+let healthChild='lev';
+window.setHealthChild = function(c){
+  healthChild=c;
+  document.getElementById('htab2-lev').classList.toggle('active', c==='lev');
+  document.getElementById('htab2-mark').classList.toggle('active', c==='mark');
+  renderHealth();
+};
+
+// current medication courses (mirror of MED_SCHEDULE regimens)
+const HEALTH_COURSES = [
+  {child:'mark', ico:'👃', en:'Nazivin baby — nose',        ru:'називин',    dose:'2 drops × 3/day', till:'2026-07-01'},
+  {child:'mark', ico:'💧', en:'Aquamaris — nasal rinse',    ru:'аквамарис',  dose:'rinse × 3/day',   till:'2026-07-01'},
+  {child:'mark', ico:'🌿', en:'Sextafat — nose + oral',     ru:'секстафат',  dose:'5 ml oral × 3/day', till:'2026-07-02'},
+  {child:'mark', ico:'💊', en:'Fenistil',                    ru:'фенистил',   dose:'4 drops × 3/day', till:'2026-07-02'},
+  {child:'both', ico:'☀️', en:'Vitamin D',                   ru:'витамин D',  dose:'2 drops · morning', till:null},
+  {child:'both', ico:'💊', en:'Folic acid',                  ru:'фолиевая',   dose:'¼ tab · morning', till:null},
+  {child:'both', ico:'🧴', en:'Emollient',                   ru:'эмолент',    dose:'morning + evening', till:null},
+];
+
+async function renderHealth(){
+  const root=document.getElementById('health-content');
+  if (!root) return;
+  root.innerHTML='<div class="loading">Загрузка... / Loading...</div>';
+  const t=todayISO();
+  // meds adherence last 7 days
+  const start7=(()=>{const d=new Date();d.setDate(d.getDate()-6);return dateISO(d);})();
+  let given=0;
+  try{
+    const {data}=await db.from(T_MEDS).select('*').eq('child',healthChild).gte('date',start7).lte('date',t).eq('given',true);
+    given=(data||[]).length;
+  }catch(e){}
+  const expPerDay=totalExpectedMedsFor(healthChild);
+  const expected=expPerDay*7;
+  const courses=HEALTH_COURSES.filter(c=>(c.child===healthChild||c.child==='both') && (!c.till || c.till>=t));
+  const done=HEALTH_COURSES.filter(c=>(c.child===healthChild||c.child==='both') && c.till && c.till<t).slice(0,3);
+  const daysLeft=till=>{ if(!till) return null; return Math.max(0,Math.round((new Date(till+'T12:00')-new Date(t+'T12:00'))/86400000)); };
+
+  // labs
+  let labs=null, labsErr=false;
+  try{
+    const {data,error}=await db.from('lab_results').select('*').eq('child',healthChild).order('date',{ascending:false});
+    if (error) labsErr=true; else labs=data||[];
+  }catch(e){ labsErr=true; }
+
+  let labsH='';
+  if (labsErr){
+    labsH=`<div class="empty" style="padding:12px;font-size:12px">Labs storage not set up yet<br>Хранилище анализов ещё не настроено — скажи Claude «настрой анализы»</div>`;
+  } else if (!labs.length){
+    labsH=`<div class="empty" style="padding:12px;font-size:12px">No results yet · анализов пока нет</div>`;
+  } else {
+    const hemo=labs.filter(l=>l.value_name==='hemoglobin'&&l.value_num).map(l=>({d:l.date,v:l.value_num})).reverse();
+    if (hemo.length>=2){
+      const last=hemo[hemo.length-1].v;
+      labsH+=`<div class="st-big" style="font-size:24px">Hemoglobin ${last} <small>g/L</small></div>
+        <span class="st-verdict ${last>=105&&last<=135?'ok':'warn'}">${last>=105&&last<=135?'✓ in range 105–135':'⚠ out of range 105–135'} <span class="vr">· гемоглобин</span></span>
+        ${svgLine(hemo,90,'#3A6FA8',v=>v)}`;
+    }
+    labsH+=`<div style="margin-top:12px">`+labs.map(l=>{
+      const files=(l.file_urls||[]);
+      return `<div class="hl-row"><div class="li">${l.type==='visit'?'📋':'🩸'}</div>
+        <div><div class="ln">${escH(l.title||l.type||'Result')}</div><small class="ln" style="font-weight:600;color:#98a2ad">${escH(l.date)}${l.value_name?` · ${escH(l.value_name)} ${l.value_num}`:''}${l.note?` · ${escH(l.note)}`:''}</small></div>
+        <div class="la">${files.length?`<a href="${escH(files[0])}" target="_blank" style="color:inherit;text-decoration:none">📎 ${files.length} file${files.length>1?'s':''}</a>`:''}</div></div>`;
+    }).join('')+`</div>`;
+  }
+
+  root.innerHTML=`
+    <div class="st-card">
+      <div class="st-head"><div class="ci" style="background:#E3EDF8">🧪</div>
+        <div class="ct">Lab results <small>analyses & files · анализы</small></div></div>
+      ${labsH}
+    </div>
+
+    <div class="st-card">
+      <div class="st-head"><div class="ci" style="background:#FCE6E0">💊</div>
+        <div class="ct">Medication <small>doses & courses · лекарства</small></div></div>
+      <div class="st-big" style="font-size:22px">${given}${expected?` of ~${expected}`:''} <small>doses / 7 days</small></div>
+      ${expected&&given>=expected*0.9?`<span class="st-verdict ok">✓ given on time <span class="vr">· вовремя</span></span>`:''}
+      ${courses.length?`<div style="font-size:11px;font-weight:800;color:#5a6778;margin-top:14px">CURRENT · текущие:</div>`:''}
+      ${courses.map(c=>{
+        const dl=daysLeft(c.till);
+        return `<div class="hl-med"><div class="mi">${c.ico}</div>
+          <div class="mn">${c.en}<small>${c.dose} · ${c.ru}</small></div>
+          <div class="md">${dl===null?'ongoing':`<span class="left">${dl} day${dl===1?'':'s'} left</span><br>till ${c.till.slice(5).split('-').reverse().join('.')}`}</div></div>`;
+      }).join('')}
+      ${done.length?`<div style="font-size:11px;font-weight:800;color:#5a6778;margin-top:14px">FINISHED · завершены:</div>`+
+        done.map(c=>`<div class="hl-med"><div class="mi">${c.ico}</div><div class="mn">${c.en}<small>${c.dose}</small></div><div class="md">✓ done ${c.till.slice(5).split('-').reverse().join('.')}</div></div>`).join(''):''}
+    </div>
+
+    <div class="st-card">
+      <div class="st-head"><div class="ci" style="background:#E8F0E8">👩‍⚕️</div>
+        <div class="ct">Doctors <small>контакты врачей</small></div></div>
+      <div class="hl-row"><div class="li">🩺</div>
+        <div><div class="ln">Pediatrician · KlubMed</div><small class="ln" style="font-weight:600;color:#98a2ad">Костюшина Наталья Сергеевна</small></div>
+        <div class="la"></div></div>
+      <div class="hl-row"><div class="li">🍎</div>
+        <div><div class="ln">Nutrition consultant</div><small class="ln" style="font-weight:600;color:#98a2ad">online · по прикорму · every 3–4 weeks</small></div>
+        <div class="la"></div></div>
+    </div>`;
+}
 
 // ═══════════════════════════════════════════════════════════════
 // BOOT
