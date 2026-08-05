@@ -4634,22 +4634,29 @@ function svgLine(series, H, color, unitFmt){
   return s+'</svg>';
 }
 
-// classify one child's sleep rows into nights (by wake day) + naps (by day)
+// classify one child's sleep rows into nights (by wake day) + naps (by day).
+// Night window: segments STARTING 18:00–06:59 belong to the night (grouped with wake-ups);
+// evening starts (>=18:00) belong to NEXT day's night. Day naps start 07:00–17:59.
 function splitSleep(rows){
   const nights={}, naps={};
   rows.forEach(e=>{
     if (!e.start_time || !e.end_time) return;
     const min = sleepDurMin(e); if (!min) return;
-    const st=new Date(e.start_time), en=new Date(e.end_time);
-    const crossMid = dateISO(st)!==dateISO(en);
-    const isNight = crossMid || (st.getHours()>=18 && min>=300);
-    const day = sleepBucketDate(e);
-    if (isNight){
-      // keep the longest night per wake-day
-      if (!nights[day] || nights[day].min<min) nights[day]={s:tsHHMM(e.start_time),e:tsHHMM(e.end_time),min};
+    const st=new Date(e.start_time);
+    const h=st.getHours();
+    if (h>=18 || h<7){
+      const day = h>=18 ? dateISO(new Date(st.getTime()+86400000)) : dateISO(st);
+      (nights[day]=nights[day]||{segs:[]}).segs.push({s:tsHHMM(e.start_time),e:tsHHMM(e.end_time),min,ts:st.getTime()});
     } else {
-      (naps[day]=naps[day]||[]).push({s:tsHHMM(e.start_time),e:tsHHMM(e.end_time),min});
+      (naps[dateISO(st)]=naps[dateISO(st)]||[]).push({s:tsHHMM(e.start_time),e:tsHHMM(e.end_time),min});
     }
+  });
+  Object.keys(nights).forEach(d=>{
+    const n=nights[d];
+    n.segs.sort((a,b)=>a.ts-b.ts);
+    n.min=n.segs.reduce((s,x)=>s+x.min,0);
+    n.s=n.segs[0].s; n.e=n.segs[n.segs.length-1].e;
+    n.wake=n.segs.length-1;
   });
   Object.values(naps).forEach(a=>a.sort((x,y)=>x.s.localeCompare(y.s)));
   return {nights,naps};
@@ -4787,9 +4794,15 @@ async function renderStats(){
           ${gridLast7.slice().reverse().map(d=>{
             const n=cs.nights[d];
             const open = d===end && !n && (cs.SL.some(e=>!e.end_time));
-            return `<div class="nr"><span class="nd">${wdShort(d)}</span><span class="ni">${n?`${n.s} → ${n.e}`:(open?'sleeping now…':'—')}</span><span class="nv">${n?fmtDur(n.min):''}</span></div>`;
+            const iv = n
+              ? n.segs.map(x=>`${x.s}–${x.e}`).join(' · ')
+              : (open?'sleeping now…':'—');
+            return `<div class="nr"><span class="nd">${wdShort(d)}</span>
+              <span class="ni">${iv}${n&&n.wake?`<br><span style="font-size:10px;color:#C77700;font-weight:700">${n.wake} wake-up${n.wake>1?'s':''} · просыпался</span>`:''}</span>
+              <span class="nv">${n?fmtDur(n.min):''}</span></div>`;
           }).join('')}
         </div>
+        <div style="font-size:10.5px;color:#98a2ad;font-weight:600;margin-top:10px">🌙 Night = falls asleep after 18:00 → wakes before 07:00, wake-ups included · ночь: с вечера до 7 утра, с просыпаниями</div>
       </div>
       <div class="st-card">
         <div class="st-head"><div class="ci" style="background:#FDF3DC">☀️</div><div class="ct">Day naps <small>intervals · дневные сны</small></div></div>
@@ -4826,7 +4839,7 @@ async function renderStats(){
     const insH = ins.length? `<div class="st-card">${ins.map(i=>`<div class="st-ins ${i.cls}"><span class="dot"></span><div><b>${i.en}</b><small>${i.ru}</small></div></div>`).join('')}</div>` : '';
     const nightRow=(d)=>{
       const nl=L.nights[d], nm=M.nights[d];
-      const cell=(n,cls)=>n?`<span class="n2c ${cls}"><span class="nv" style="font-weight:800;font-size:13px;color:${cls==='lv'?'#2A6B88':'#4E7D5F'}">${fmtDur(n.min)}</span><br><span style="font-size:9.5px;color:#98a2ad;font-weight:600">${n.s} → ${n.e}</span></span>`:'<span style="color:#98a2ad">—</span>';
+      const cell=(n,cls)=>n?`<span class="n2c ${cls}"><span class="nv" style="font-weight:800;font-size:13px;color:${cls==='lv'?'#2A6B88':'#4E7D5F'}">${fmtDur(n.min)}</span><br><span style="font-size:9.5px;color:#98a2ad;font-weight:600">${n.s} → ${n.e}${n.wake?` · <span style="color:#C77700">${n.wake}↑</span>`:''}</span></span>`:'<span style="color:#98a2ad">—</span>';
       return `<div class="nr" style="display:grid;grid-template-columns:38px 1fr 1fr;gap:8px;align-items:center;padding:6px 0;border-top:.5px solid rgba(0,0,0,.05)">
         <span class="nd">${wdShort(d)}</span>${cell(nl,'lv')}${cell(nm,'mk')}</div>`;
     };
