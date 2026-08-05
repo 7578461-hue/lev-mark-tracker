@@ -1140,10 +1140,6 @@ body[data-view="sleep"] .topbar{background:rgba(255,255,255,.88);backdrop-filter
       Lev & Mark
       <span class="b-sub" id="date-strip">—</span>
     </div>
-    <button class="mode-btn" id="mode-btn" onclick="toggleMode()">
-      <span id="mode-ico">👶</span>
-      <span id="mode-lbl">Nanny / Няня</span>
-    </button>
   </div>
 </header>
 
@@ -1583,6 +1579,7 @@ body[data-view="sleep"] .topbar{background:rgba(255,255,255,.88);backdrop-filter
       </button>
     </div>
     <div class="prof-period" style="margin-bottom:12px">
+      <button id="sper-1" onclick="setStatsPeriod(1)">Day · день</button>
       <button class="on" id="sper-7" onclick="setStatsPeriod(7)">Week · 7 дн</button>
       <button id="sper-30" onclick="setStatsPeriod(30)">Month · 30 дн</button>
     </div>
@@ -1943,23 +1940,8 @@ async function uploadPhotos(files, kind, entryId){
 // ═══════════════════════════════════════════════════════════════
 // MODE / TAB / CHILD
 // ═══════════════════════════════════════════════════════════════
-function toggleMode(){
-  mode = mode==='nanny' ? 'parents' : 'nanny';
-  const b = document.getElementById('mode-btn');
-  document.body.classList.toggle('parents-mode', mode==='parents');
-  if (mode==='parents'){
-    b.classList.add('on');
-    document.getElementById('mode-ico').textContent = '👨‍👩‍👦';
-    document.getElementById('mode-lbl').textContent = 'Parents / Родители';
-    historySub='profile';
-    goView('history'); renderHistorySubs();
-  } else {
-    b.classList.remove('on');
-    document.getElementById('mode-ico').textContent = '👶';
-    document.getElementById('mode-lbl').textContent = 'Nanny / Няня';
-    goView('home');
-  }
-}
+// Mode switcher removed — everything is shared (nanny + parents see the same app)
+function toggleMode(){ /* no-op */ }
 
 function goHome(){ goView('home'); }
 
@@ -4540,6 +4522,7 @@ window.setStatsChild = function(c){
 };
 window.setStatsPeriod = function(p){
   statsPeriod = p;
+  document.getElementById('sper-1').classList.toggle('on', p===1);
   document.getElementById('sper-7').classList.toggle('on', p===7);
   document.getElementById('sper-30').classList.toggle('on', p===30);
   renderStats();
@@ -4631,6 +4614,34 @@ function svgLine(series, H, color, unitFmt){
   const dl=iso=>{const d=new Date(iso+'T12:00:00');return d.toLocaleDateString('en',{month:'short',day:'numeric'});};
   s+=`<text x="${x(0)}" y="${H-2}" font-size="9.5" fill="#98a2ad">${dl(series[0].d)}</text>`;
   s+=`<text x="${x(li)}" y="${H-2}" font-size="9.5" font-weight="700" fill="#1a1d24" text-anchor="end">${dl(series[li].d)}</text>`;
+  return s+'</svg>';
+}
+
+// two lines on one chart (Lev vs Mark), e.g. weight
+function svgLine2(a, b, H){
+  const W=347,padL=30,padR=8,padT=14,padB=18;
+  const ih=H-padT-padB, iw=W-padL-padR;
+  const all=[...a,...b].map(p=>p.v);
+  if (all.length<2) return '<div class="empty" style="padding:10px;font-size:12px">Not enough data · мало данных</div>';
+  const lo=Math.min(...all), hi=Math.max(...all);
+  const pad=(hi-lo)*0.2||0.1, l2=lo-pad, h2=hi+pad;
+  const dts=[...new Set([...a,...b].map(p=>p.d))].sort();
+  const x=d=>padL+(dts.length>1?dts.indexOf(d)/(dts.length-1):0.5)*iw;
+  const y=v=>padT+ih-(v-l2)/(h2-l2)*ih;
+  const draw=(arr,col)=>{
+    if (!arr.length) return '';
+    const pts=arr.map(p=>`${x(p.d).toFixed(1)},${y(p.v).toFixed(1)}`).join(' ');
+    let o=`<polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>`;
+    const lp=arr[arr.length-1];
+    o+=`<circle cx="${x(lp.d)}" cy="${y(lp.v)}" r="4.4" fill="${col}"/>`;
+    o+=`<text x="${x(lp.d)}" y="${y(lp.v)-8}" font-size="10.5" font-weight="800" fill="${col}" text-anchor="end">${lp.v.toFixed(2)}</text>`;
+    return o;
+  };
+  const dl=iso=>new Date(iso+'T12:00:00').toLocaleDateString('en',{month:'short',day:'numeric'});
+  let s=`<svg viewBox="0 0 ${W} ${H}">`;
+  s+=draw(a,'#2A6B88')+draw(b,'#5C9B72');
+  s+=`<text x="${padL}" y="${H-2}" font-size="9.5" fill="#98a2ad">${dl(dts[0])}</text>`;
+  s+=`<text x="${W-padR}" y="${H-2}" font-size="9.5" font-weight="700" fill="#1a1d24" text-anchor="end">${dl(dts[dts.length-1])}</text>`;
   return s+'</svg>';
 }
 
@@ -4749,7 +4760,10 @@ async function renderStats(){
   try{ D=await fetchStatsData(start,end); }
   catch(e){ root.innerHTML='<div class="empty">Load error / Ошибка загрузки</div>'; return; }
 
-  const gridLast7 = dates.slice(-7);
+  const gridLast7 = dates.slice(-Math.min(7, dates.length));
+  const isDay = statsPeriod===1;
+  const perLbl = isDay ? 'today · сегодня' : 'day avg';
+  const chart = (svg) => isDay ? '' : svg;
 
   if (statsChild!=='both'){
     const cs=childSeries(D, statsChild, dates);
@@ -4769,21 +4783,21 @@ async function renderStats(){
     root.innerHTML = insH + `
       <div class="st-sect">🍽 Food <span class="vr">· еда</span></div>
       <div class="st-card">
-        <div class="st-head"><div class="ci" style="background:#FCE0E0">🍼</div><div class="ct">Formula <small>daily volume, ml · смесь</small></div></div>
-        <div class="st-big">${avgMl} <small>ml/day avg</small></div>
-        ${tf!==null?`<span class="st-verdict ${tf<-5?'ok':'neu'}">${tf>0?'↑ +':'↓ '}${tf}% vs prev <span class="vr">· к прошлому периоду</span></span>`:''}
-        ${svgBars(cs.ml,labels,'#D85060',130)}
+        <div class="st-head"><div class="ci" style="background:#FCE0E0">🍼</div><div class="ct">Formula <small>volume, ml · смесь</small></div></div>
+        <div class="st-big">${avgMl} <small>ml ${perLbl}</small></div>
+        ${!isDay&&tf!==null?`<span class="st-verdict ${tf<-5?'ok':'neu'}">${tf>0?'↑ +':'↓ '}${tf}% vs prev <span class="vr">· к прошлому периоду</span></span>`:''}
+        ${chart(svgBars(cs.ml,labels,'#D85060',130))}
       </div>
       <div class="st-card">
-        <div class="st-head"><div class="ci" style="background:#E0F0DC">🥦</div><div class="ct">Solids <small>grams per day · прикорм, г</small></div></div>
-        <div class="st-big">${Math.round(avgTsp*5)} <small>g/day avg · ≈${Math.round(avgTsp)} tsp</small></div>
-        ${tsp!==null?`<span class="st-verdict ${tsp>5?'ok':'neu'}">${tsp>0?'↑ +':''}${tsp}% vs prev</span>`:''}
-        ${svgBars(cs.tsp.map(v=>Math.round(v*5)),labels,'#5C8B6F',130)}
+        <div class="st-head"><div class="ci" style="background:#E0F0DC">🥦</div><div class="ct">Solids <small>grams · прикорм, г</small></div></div>
+        <div class="st-big">${Math.round(avgTsp*5)} <small>g ${perLbl} · ≈${Math.round(avgTsp)} tsp</small></div>
+        ${!isDay&&tsp!==null?`<span class="st-verdict ${tsp>5?'ok':'neu'}">${tsp>0?'↑ +':''}${tsp}% vs prev</span>`:''}
+        ${chart(svgBars(cs.tsp.map(v=>Math.round(v*5)),labels,'#5C8B6F',130))}
       </div>
       <div class="st-card">
-        <div class="st-head"><div class="ci" style="background:#DDF0FA">💧</div><div class="ct">Water <small>ml per day · питьё</small></div></div>
-        <div class="st-big">${avgW} <small>ml/day avg</small></div>
-        ${svgBars(cs.wml,labels,'#3A8FB5',110)}
+        <div class="st-head"><div class="ci" style="background:#DDF0FA">💧</div><div class="ct">Water <small>ml · питьё</small></div></div>
+        <div class="st-big">${avgW} <small>ml ${perLbl}</small></div>
+        ${chart(svgBars(cs.wml,labels,'#3A8FB5',110))}
       </div>
 
       <div class="st-sect">😴 Sleep <span class="vr">· сон</span></div>
@@ -4806,16 +4820,16 @@ async function renderStats(){
       </div>
       <div class="st-card">
         <div class="st-head"><div class="ci" style="background:#FDF3DC">☀️</div><div class="ct">Day naps <small>intervals · дневные сны</small></div></div>
-        <div class="st-big">${fmtDur(Math.round(avgNz(napTotByDay)*60))} <small>avg · ${napToday.length} naps today</small></div>
+        <div class="st-big">${fmtDur(Math.round(avgNz(napTotByDay)*60))} <small>${isDay?'today':'avg'} · ${napToday.length} naps</small></div>
         ${napToday.length?`<div style="font-size:11px;font-weight:800;color:#5a6778;margin-top:10px">TODAY · сегодня:</div>
         <div class="st-naps">${napToday.map(n=>`<div class="st-nap">${n.s}–${n.e}<small>${fmtDur(n.min)}</small></div>`).join('')}</div>`:''}
-        ${svgBars(napTotByDay.map(v=>+v.toFixed(1)),gridLast7.map(wdShort),'#C89448',120,v=>v.toFixed(1)+'h')}
+        ${chart(svgBars(napTotByDay.map(v=>+v.toFixed(1)),gridLast7.map(wdShort),'#C89448',120,v=>v.toFixed(1)+'h'))}
       </div>
 
-      <div class="st-sect">🩲 Stool <span class="vr">· стул (last 7 days)</span></div>
+      <div class="st-sect">🩲 Stool <span class="vr">· стул${isDay?'':' (7 дн)'}</span></div>
       <div class="st-card">
         <div class="st-head"><div class="ci"><img src="diaper.svg" alt="" style="width:30px;height:30px"></div><div class="ct">Stool — daily <small>times · consistency</small></div></div>
-        <div class="st-big">${stoolTotal} <small>times / 7 days</small></div>
+        <div class="st-big">${stoolTotal} <small>times ${isDay?'today':'/ '+gridLast7.length+' days'}</small></div>
         ${stoolGapDays(cs.stool)>=2?`<span class="st-verdict warn">⚠ no stool ${stoolGapDays(cs.stool)} days <span class="vr">· нет ${stoolGapDays(cs.stool)} дн</span></span>`:`<span class="st-verdict ok">✓ regular <span class="vr">· регулярно</span></span>`}
         <div class="st-poo">
           ${gridLast7.map((d,i)=>{const x=stool7[i];
@@ -4828,7 +4842,7 @@ async function renderStats(){
         <div class="st-head"><div class="ci" style="background:#F4F0E5">⚖️</div><div class="ct">Weight <small>вес, кг</small></div></div>
         <div class="st-big">${cs.wt.length?cs.wt[cs.wt.length-1].v.toFixed(2):'—'} <small>kg</small></div>
         ${g!==null?`<span class="st-verdict ${g>=90&&g<=180?'ok':'neu'}">${g>=90&&g<=180?'✓':''} +${g} g/week <span class="vr">· ${g>=90&&g<=180?'растёт как надо':'прибавка'}</span></span>`:''}
-        ${svgLine(wtSeries.length>=2?wtSeries:cs.wt.slice(-6), 100, '#8A5F1A', v=>v.toFixed(2))}
+        ${svgLine(wtSeries.length>1?wtSeries:cs.wt.slice(-6), 100, '#8A5F1A', v=>v.toFixed(2))}
       </div>`;
   } else {
     // ═══ BOTH MODE ═══
@@ -4854,52 +4868,83 @@ async function renderStats(){
     };
     const wtL=L.wt.slice(-1)[0], wtM=M.wt.slice(-1)[0];
     const gL=weightGainPerWeek(L.wt), gM=weightGainPerWeek(M.wt);
+    // night / nap totals per kid
+    const nightAvg=(cs)=>{const ds=end7.filter(d=>cs.nights[d]);return ds.length?ds.reduce((s,d)=>s+cs.nights[d].min,0)/ds.length:0;};
+    const napAvg=(cs)=>avgNz(end7.map(d=>(cs.naps[d]||[]).reduce((s,n)=>s+n.min,0)));
+    const stoolSum=(cs)=>end7.reduce((s,d)=>s+(cs.stool[dates.indexOf(d)]?.n||0),0);
+    const legend=`<div style="display:flex;gap:14px;font-size:10.5px;font-weight:700;color:#5a6778;margin-top:8px">
+      <span><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#2A6B88;margin-right:4px;vertical-align:-1px"></i>Lev · Лев</span>
+      <span><i style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#5C9B72;margin-right:4px;vertical-align:-1px"></i>Mark · Марк</span></div>`;
+    const wtLser=L.wt.filter(p=>p.d>=start), wtMser=M.wt.filter(p=>p.d>=start);
+
     root.innerHTML = insH + `
       <div class="st-sect">🍽 Food <span class="vr">· еда, оба</span></div>
       <div class="st-card">
-        <div class="st-head"><div class="ci" style="background:#FCE0E0">🍼</div><div class="ct">Formula <small>ml by day, both</small></div></div>
-        ${svgPair(L.ml,M.ml,labels,140)}
+        <div class="st-head"><div class="ci" style="background:#FCE0E0">🍼</div><div class="ct">Formula <small>ml · смесь</small></div></div>
         <div class="st-avg2">
-          <div class="a-lev">${Math.round(avgNz(L.ml))} ml<small>Lev avg/day</small></div>
-          <div class="a-mark">${Math.round(avgNz(M.ml))} ml<small>Mark avg/day</small></div>
+          <div class="a-lev">${Math.round(avgNz(L.ml))} ml<small>Lev · ${perLbl}</small></div>
+          <div class="a-mark">${Math.round(avgNz(M.ml))} ml<small>Mark · ${perLbl}</small></div>
         </div>
+        ${chart(svgPair(L.ml,M.ml,labels,140)+legend)}
       </div>
       <div class="st-card">
-        <div class="st-head"><div class="ci" style="background:#E0F0DC">🥦</div><div class="ct">Solids <small>grams by day, both · г</small></div></div>
-        ${svgPair(L.tsp.map(v=>Math.round(v*5)),M.tsp.map(v=>Math.round(v*5)),labels,140)}
+        <div class="st-head"><div class="ci" style="background:#E0F0DC">🥦</div><div class="ct">Solids <small>grams · прикорм, г</small></div></div>
         <div class="st-avg2">
-          <div class="a-lev">${Math.round(avgNz(L.tsp)*5)} g<small>Lev avg/day</small></div>
-          <div class="a-mark">${Math.round(avgNz(M.tsp)*5)} g<small>Mark avg/day</small></div>
+          <div class="a-lev">${Math.round(avgNz(L.tsp)*5)} g<small>Lev · ${perLbl}</small></div>
+          <div class="a-mark">${Math.round(avgNz(M.tsp)*5)} g<small>Mark · ${perLbl}</small></div>
         </div>
+        ${chart(svgPair(L.tsp.map(v=>Math.round(v*5)),M.tsp.map(v=>Math.round(v*5)),labels,140)+legend)}
+      </div>
+      <div class="st-card">
+        <div class="st-head"><div class="ci" style="background:#DDF0FA">💧</div><div class="ct">Water <small>ml · питьё</small></div></div>
+        <div class="st-avg2">
+          <div class="a-lev">${Math.round(avgNz(L.wml))} ml<small>Lev · ${perLbl}</small></div>
+          <div class="a-mark">${Math.round(avgNz(M.wml))} ml<small>Mark · ${perLbl}</small></div>
+        </div>
+        ${chart(svgPair(L.wml,M.wml,labels,120)+legend)}
       </div>
 
       <div class="st-sect">😴 Night sleep <span class="vr">· ночной сон, оба</span></div>
       <div class="st-card">
+        <div class="st-avg2" style="margin-top:0;margin-bottom:10px">
+          <div class="a-lev">${nightAvg(L)?fmtDur(nightAvg(L)):'—'}<small>Lev · ${isDay?'today':'avg'}</small></div>
+          <div class="a-mark">${nightAvg(M)?fmtDur(nightAvg(M)):'—'}<small>Mark · ${isDay?'today':'avg'}</small></div>
+        </div>
         <div style="display:grid;grid-template-columns:38px 1fr 1fr;gap:8px;font-size:10px;font-weight:800">
           <span></span><span style="color:#2A6B88">Lev</span><span style="color:#4E7D5F">Mark</span>
         </div>
         ${end7.slice().reverse().map(nightRow).join('')}
+        <div style="font-size:10.5px;color:#98a2ad;font-weight:600;margin-top:10px">↑ = wake-ups · просыпания внутри ночи</div>
       </div>
 
-      <div class="st-sect">☀️ Day naps today <span class="vr">· сегодня</span></div>
+      <div class="st-sect">☀️ Day naps <span class="vr">· дневной сон, оба</span></div>
       <div class="st-card">
-        <div class="st-nh lv">LEV · ${(L.naps[end]||[]).length} naps</div>
+        <div class="st-avg2" style="margin-top:0">
+          <div class="a-lev">${napAvg(L)?fmtDur(napAvg(L)):'—'}<small>Lev · ${isDay?'today':'avg'}</small></div>
+          <div class="a-mark">${napAvg(M)?fmtDur(napAvg(M)):'—'}<small>Mark · ${isDay?'today':'avg'}</small></div>
+        </div>
+        <div class="st-nh lv">LEV · ${(L.naps[end]||[]).length} naps today</div>
         <div class="st-naps">${napChips(L.naps[end],'lv')}</div>
-        <div class="st-nh mk">MARK · ${(M.naps[end]||[]).length} naps</div>
+        <div class="st-nh mk">MARK · ${(M.naps[end]||[]).length} naps today</div>
         <div class="st-naps">${napChips(M.naps[end],'mk')}</div>
       </div>
 
-      <div class="st-sect">🩲 Stool <span class="vr">· стул, оба (7 дн)</span></div>
+      <div class="st-sect">🩲 Stool <span class="vr">· стул, оба</span></div>
       <div class="st-card">
+        <div class="st-avg2" style="margin-top:0;margin-bottom:4px">
+          <div class="a-lev">${stoolSum(L)}×<small>Lev · ${isDay?'today':end7.length+' days'}</small></div>
+          <div class="a-mark">${stoolSum(M)}×<small>Mark · ${isDay?'today':end7.length+' days'}</small></div>
+        </div>
         <div class="st-poo">${end7.map(stoolCell).join('')}</div>
       </div>
 
       <div class="st-sect">⚖️ Weight <span class="vr">· вес, оба</span></div>
       <div class="st-card">
-        <div class="st-avg2">
+        <div class="st-avg2" style="margin-top:0">
           <div class="a-lev">${wtL?wtL.v.toFixed(2):'—'} kg<small>Lev${gL!==null?` · +${gL} g/wk`:''}</small></div>
           <div class="a-mark">${wtM?wtM.v.toFixed(2):'—'} kg<small>Mark${gM!==null?` · +${gM} g/wk`:''}</small></div>
         </div>
+        ${chart(svgLine2(wtLser.length>1?wtLser:L.wt.slice(-6), wtMser.length>1?wtMser:M.wt.slice(-6), 110)+legend)}
       </div>`;
   }
 }
