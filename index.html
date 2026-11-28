@@ -1061,6 +1061,7 @@ body[data-view="sleep"] .topbar{background:rgba(255,255,255,.88);backdrop-filter
 .mark-active .export-period button.on{background:var(--mark-bg);border-color:var(--mark);color:var(--mark)}
 .export-btn{width:100%;padding:14px;border-radius:var(--r);border:none;background:var(--text);color:white;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;touch-action:manipulation}
 </style>
+<link rel="stylesheet" href="dev.css">
 </head>
 <body data-view="home">
 
@@ -1159,6 +1160,11 @@ body[data-view="sleep"] .topbar{background:rgba(255,255,255,.88);backdrop-filter
     <div class="home-date" id="home-date" style="display:none">—</div>
     <div class="dual" id="dual-summary"><div class="loading">Загрузка... / Loading...</div></div>
     <div class="nanny-only">
+      <button class="wbar wb-dev" onclick="goView('dev')">
+        <div class="wb-ic"><svg class="icn icn-lg"><use href="#i-baby"/></svg></div>
+        <div class="wb-tx"><b>Development · Развитие</b><small id="dev-home-hint">Games &amp; exercises · Игры и упражнения</small></div>
+        <div class="wb-ar"><svg class="icn icn-sm"><use href="#i-arr"/></svg></div>
+      </button>
       <button class="wbar wb-sleep" onclick="goView('sleep')">
         <div class="wb-ic"><svg class="icn icn-lg"><use href="#i-moon"/></svg></div>
         <div class="wb-tx"><b>Sleep tracking</b><small>Сон</small></div>
@@ -1547,6 +1553,12 @@ body[data-view="sleep"] .topbar{background:rgba(255,255,255,.88);backdrop-filter
   </section>
 
   <!-- ═══ ИСТОРИЯ / HISTORY ═══ -->
+  <!-- ═══ DEVELOPMENT / РАЗВИТИЕ ═══ -->
+  <section class="tab-pane" data-view="dev" id="pane-dev">
+    <button class="back-btn" onclick="devBack()">← Back / Назад</button>
+    <div id="dev-root"></div>
+  </section>
+
   <section class="tab-pane" data-view="history" id="pane-history">
     <div class="hist-sub-tabs">
       <button class="hist-sub on" id="hsub-byday" onclick="setHistorySub('byday')">📅 По дням / By day</button>
@@ -1962,6 +1974,7 @@ function goView(v){
   if (v==='history') renderHistory();
   if (v==='stats') renderStats();
   if (v==='health') renderHealth();
+  if (v==='dev' && window.renderDev) renderDev();
 }
 
 function formEl(v){ return document.getElementById(v+'-form') || document.getElementById(v+'-form-wrap'); }
@@ -3221,6 +3234,7 @@ async function renderHome(){
       ${kidCard('mark', D.mark, 'tiger.svg', 'Mark')}
     </div>
   `;
+  if (window.devHomeHint && day === todayISO()) devHomeHint();
 }
 
 window.navHomeDay = function(delta){
@@ -5067,5 +5081,6 @@ renderHome();
 updateSaveBar();
 subscribeRealtime();
 </script>
+<script src="dev.js"></script>
 </body>
 </html>
